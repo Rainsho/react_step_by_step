@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Todo List</title>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="js/react.min.js"></script>
+    <script src="js/react-dom.min.js"></script>
+    <script src="js/babel.min.js"></script>
+    <script type="text/babel">
+    class TodoList extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                text: '',
+                todos: [],
+            };
+            this.handleChange = this.handleChange.bind(this);
+            this.addTodo = this.addTodo.bind(this);
+        }
+
+        handleChange(e) {
+            this.setState({ text: e.target.value });
+        }
+
+        addTodo() {
+            const todos = [...this.state.todos];
+            const text = this.state.text;
+            todos.push(text);
+            this.setState({ text: '', todos });
+        }
+
+        render() {
+            const lis = this.state.todos.map(x => <li>{x}</li>);
+            return (
+                <div>
+                    <h1>Todo List</h1>
+                    <input type="text" value={this.state.text} onChange={this.handleChange} />
+                    <button onClick={this.addTodo}>Add Todo</button>
+                    <hr />
+                    <ul>{lis}</ul>
+                </div>
+            );
+        }
+    }
+
+    ReactDOM.render(
+        <TodoList />,
+        document.getElementById('root')
+    );
+    </script>
+</body>
+
+</html>
