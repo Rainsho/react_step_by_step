@@ -19,7 +19,7 @@ React 有个基本认识；
 
 ## 项目目录
 
-这个项目启动的时候 React 的最新版本为 v15.6.1 故本项目中在没有特别约定的情况下均使用此版本。
+这个项目启动的时候 React 的最新版本为 v15.6.1 故本项目中在没有特别约定的情况下均使用此版本。
 
 * [lesson101](./lesson101/README.md) Hello World (Simple Todo List)
 * Node.js 及 npm 简单介绍
