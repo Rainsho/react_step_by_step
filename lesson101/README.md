@@ -51,4 +51,6 @@ React 组件，这也将是这个项目中主要使用的方式，当然也会�
 
 ## 拓展阅读
 
+1. [React 安装](http://www.runoob.com/react/react-install.html)
+
 下一章: [Node.js 及 npm 简单介绍](../lesson102/README.md)

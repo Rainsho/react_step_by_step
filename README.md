@@ -5,6 +5,8 @@
 作为后台的多人共享的开放的 Todo List 应用，计划涉及的内容包括但不限于: React ES6 Node.js Babel Flux 
 Redux MobX webpack ESLint glup Ant-Design。
 
+前面几章将主要围绕前端开发环境的搭建，后面将开始讨论一些使用 React 的过程中可能遇到的问题。
+
 ## 预备知识
 
 本项目偏重实战，故假设你对 React 已经有了基本的认识，如果没有，以下三篇文章个人认为是快速入门里面的佼佼者:
@@ -21,7 +23,7 @@ React 有个基本认识；
 
 * [lesson101](./lesson101/README.md) Hello World (Simple Todo List)
 * [lesson102](./lesson102/README.md) Node.js 及 npm 简单介绍
-* Babel 及 webpack 打包
+* [lesson103](./lesson103/README.md) Babel 及 webpack 打包
 * ESLint 语法检查
 * Flux
 * MobX

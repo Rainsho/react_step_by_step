@@ -78,6 +78,11 @@ index.html 就可以看到之前的内容了。
 <script src="./node_modules/babel-standalone/babel.js"></script>
 ```
 
+哦，对了。考虑到后面既要写代码，又要敲命令行，这里给大家安利一个 IDE -- **Visual Studio Code** 由微软出品，兼具
+跨平台、免费、轻量、高效等特点。可以在 [官网下载](http://code.visualstudio.com/) 安装最新版。
+
+![Visual Studio Code](./pic/vs_code.png)
+
 ## 扩展阅读
 
 1. [Node.js 安装配置](http://www.runoob.com/nodejs/nodejs-install-setup.html)
