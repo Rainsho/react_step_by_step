@@ -10,16 +10,16 @@
 
 <body>
     <div id="root"></div>
-    <script src="js/react.min.js"></script>
-    <script src="js/react-dom.min.js"></script>
-    <script src="js/babel.min.js"></script>
+    <script src="./js/react.min.js"></script>
+    <script src="./js/react-dom.min.js"></script>
+    <script src="./js/babel.min.js"></script>
     <script type="text/babel">
     class TodoList extends React.Component {
         constructor(props) {
             super(props);
             this.state = {
                 text: '',
-                todos: [],
+                todos: ['eat', 'code', 'sleep'],
             };
             this.handleChange = this.handleChange.bind(this);
             this.addTodo = this.addTodo.bind(this);
