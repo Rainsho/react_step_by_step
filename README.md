@@ -19,10 +19,8 @@ React 有个基本认识；
 
 ## 项目目录
 
-这个项目启动的时候 React 的最新版本为 v15.6.1 故本项目中在没有特别约定的情况下均使用此版本。
-
 * [lesson101](./lesson101/README.md) Hello World (Simple Todo List)
-* Node.js 及 npm 简单介绍
+* [lesson102](./lesson102/README.md) Node.js 及 npm 简单介绍
 * Babel 及 webpack 打包
 * ESLint 语法检查
 * Flux
@@ -30,3 +28,16 @@ React 有个基本认识；
 * Redux
 * Ant-Design
 * Node.js 后台
+
+## 环境版本
+
+这个项目启动的时候 React 的最新版本为 v15.6.1 故本项目中在没有特别约定的情况下均使用此版本。
+
+node 和 npm 的版本如下:
+
+```bash
+$ node -v
+v7.8.0
+$ npm -v
+v4.2.0
+```
