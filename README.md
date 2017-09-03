@@ -5,7 +5,8 @@
 作为后台的多人共享的开放的 Todo List 应用，计划涉及的内容包括但不限于: React ES6 Node.js Babel Flux 
 Redux MobX webpack ESLint glup Ant-Design。
 
-前面几章将主要围绕前端开发环境的搭建，后面将开始讨论一些使用 React 的过程中可能遇到的问题。
+前面几章将主要围绕前端开发环境的搭建，我们将从“零”开始，一步步搭建一个完善的前端开发环境。
+后面将开始讨论一些使用 React 的过程中可能遇到的问题。
 
 ## 预备知识
 
