@@ -1,0 +1,21 @@
+{
+  "name": "lesson104",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint eslint_1.js",
+    "lint-html": "eslint eslint_1.js -f html -o ./reports/lint-results.html",
+    "lint-fix": "eslint --fix eslint_1.js"
+  },
+  "author": "Rainsho",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.3.0"
+  }
+}

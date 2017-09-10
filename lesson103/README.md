@@ -44,8 +44,8 @@ $ babel babel_es6.js -o ./dist/es5.js --presets=es2015
 $ babel babel_jsx.jsx -o ./dist/jsx.js --presets=es2015,react
 
 # 非全局安装下，也可以通过 node 执行对应的文件
-$ ./node_modules/babel-cli/bin/babel babel_es6.js -o ./dist/es5.js --presets=es2015
-$ ./node_modules/babel-cli/bin/babel babel_jsx.jsx -o ./dist/jsx.js --presets=es2015,react
+$ node ./node_modules/babel-cli/bin/babel babel_es6.js -o ./dist/es5.js --presets=es2015
+$ node ./node_modules/babel-cli/bin/babel babel_jsx.jsx -o ./dist/jsx.js --presets=es2015,react
 ```
 
 配置文件是一个 json 格式的文件，大概长这样:
