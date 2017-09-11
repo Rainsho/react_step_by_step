@@ -53,13 +53,11 @@ ESLint 的配置通过 .eslintrc 的配置文件进行配置，跟 .babelrc 的�
 
 ```json
 {
-  // ...
   "scripts": {
     "lint": "eslint index.js",
     "lint-html": "eslint index.js -f html -o ./reports/lint-results.html",
     "lint-fix": "eslint --fix index.js"
   }
-  // ...
 }
 ```
 
@@ -96,7 +94,6 @@ $ npm run lint
 
 ```json
 {
-  // ...
   "rules": {
     "no-console": "off"
   }
