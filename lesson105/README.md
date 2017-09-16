@@ -59,6 +59,9 @@ $ npm install --save-dev eslint-plugin-jsx-a11y eslint-plugin-react webpack webp
 }
 ```
 
+这里我们使用了两个 Babel 的 preset ， `es2015` 负责将一些 ES6 写法的 JS 代码转换成 ES5 的写法以获得更好的兼容性， 
+`react` 则负责将 JSX 语法转换成 `createElement` 方法。
+
 4. 设定 ESLint 的配置文件 .eslintrc :
 
 ```json
@@ -71,25 +74,29 @@ $ npm install --save-dev eslint-plugin-jsx-a11y eslint-plugin-react webpack webp
 }
 ```
 
+这里我们使用了 Airbnb 公司的规则，同时设定了运行环境是 `browser` 即浏览器环境，已解决 `document` 未定义的错误提示。
+
 5. 设定 webpack 的配置文件 webpack.config.js :
+
+一些之前没用到的或者比较重要的配置的解释，我写在了注释里面。
 
 ```javascript
 var path = require('path');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src/index.jsx'),
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/dist',
+  entry: path.resolve(__dirname, 'src/index.jsx'),      // 打包入口
+  output: {                                             // 打包出口
+    path: path.resolve(__dirname, 'dist'),              // 打包目录
+    filename: 'bundle.js',                              // 打包文件名
+    publicPath: '/dist/',                               // 发布路径 与 index.html 里的引用一致
   },
-  module: {
-    rules: [
+  module: {                                             // 模块配置
+    rules: [                                            // 模块规则 对应 1.x 版本里面的 loaders
       {
-        enforce: 'pre',
-        test: /\.jsx?$/,
-        loaders: 'eslint-loader',
-        include: path.resolve(__dirname, 'src'),
+        enforce: 'pre',                                 // 规则标识 pre 表示在打包之前
+        test: /\.jsx?$/,                                // 文件名的匹配规则
+        loaders: 'eslint-loader',                       // 需要使用的 loader (string | array)
+        include: path.resolve(__dirname, 'src'),        // 要包含的文件夹 亦有 exclude 设置
       },
       {
         test: /\.jsx?$/,
@@ -97,17 +104,72 @@ module.exports = {
       }
     ],
   },
-  resolve: {
-    extensions: ['.js', '.jsx'],
-  },
-  devServer: {
-    port: 9000,
-    contentBase: './src',
+  resolve: {                                            // 查找 module 相关配置
+    extensions: ['.js', '.jsx'],                        // 扩展文件后缀名 指定可省略的后缀
+  },                                                    // import './App.jsx' -> import './App'
+  devServer: {                                          // webpack-dev-server 相关的配置
+    port: 9000,                                         // webpack-dev-server 运行所在的端口号
+    contentBase: './src',                               // 项目的更目录 即 9000 端口访问的路径
   }
 }
 ```
 
 ## 生产环境的一些优化
+
+这里不讲代码相关的优化，因为截至目前我们还没开始写真的代码，这里只是提一下在打包生产环境时的一些常用设置。也是介绍两个常用的 
+webpack 插件。完整配置参见 [webpack.production.js](./webpack.production.js)
+
+1. 注入环境变量
+
+我们增加 webpack 的 plugins 相关设置，利用 `webpack.DefinePlugin` 向代码运行环境注入 NODE_ENV 的 production 取值，
+这样在用第二步相关的代码压缩工具时，一些开发版本中的诸如如下的代码便会被移除。
+
+```javascript
+// webpack.prodction.js
+new webpack.DefinePlugin({
+  'process.env': {
+    NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+  }
+})
+
+// 常见开发库中代码
+if (process.env.NODE_ENV !== 'production') {
+  /* ... */
+}
+```
+
+2. 压缩代码
+
+利用 `webpack.optimize.UglifyJsPlugin` 进行代码压缩，同时去除 `console.log` `debugger` 等这类的代码。
+
+```javascript
+// webpack.prodction.js
+new webpack.optimize.UglifyJsPlugin({
+  compress: {
+    warnings: false,
+    drop_console: true,
+    drop_debugger: true,
+  }
+})
+```
+
+3. 将核心依赖换成压缩版
+
+到目前为止我们项目使用了 `react` 和 `react-dom` 两个库，而在生产环境我们没必要使用完整的开发版的库，一般都使用压缩版的即 
+react.min.js 和 react-dom.min.js 两个库。这种替换一般有两种办法，就笔者所在的项目组来讲，是在 webpack 的配置中排除了 
+react 和 react-dom 的打包，然后在 index.html 直接引用 .min.js 文件。第二种方法就是这里使用的，在 webpack 中通过指定 
+alias 的形式，让 webpack 在打包时使用 .min.js 而不是原本的 index.js 。
+
+```javascript
+// webpack.prodction.js
+alias: {
+  'react': path.resolve(__dirname, 'node_modules/react/dist/react.min.js'),
+  'react-dom': path.resolve(__dirname, 'node_modules/react-dom/dist/react-dom.min.js'),
+}
+```
+
+经过以上三个简单的步骤，我们执行脚本 `npm run build` 和 `npm run deploy` 分别使用 webpack.config.js 和 
+webpack.production.js 进行打包，可以看到，打包后的代码从 765k 被压缩到了 154k (两个数据为改写 Todo List v2.0之前) 。
 
 ## Todo List 的功能扩展
 
