@@ -167,7 +167,7 @@ alias: {
 ```
 
 经过以上三个简单的步骤，我们执行脚本 `npm run build` 和 `npm run deploy` 分别使用 webpack.config.js 和 
-webpack.production.js 进行打包，可以看到，打包后的代码从 765k 被压缩到了 154k (两个数据为改写 Todo List v2.0之前) 。
+webpack.production.js 进行打包，可以看到，打包后的代码从 765k 被压缩到了 154k 。
 
 ## 扩展阅读
 
