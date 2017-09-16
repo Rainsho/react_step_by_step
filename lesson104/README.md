@@ -169,4 +169,4 @@ $ npm install --save-dev babel-loader eslint-loader
 
 1. [ESLint 中文官网](http://eslint.cn/docs/about/)
 
-下一章: [Todo List v2.0](../lesson105/README.md)
+下一章: [完整的开发环境](../lesson105/README.md)

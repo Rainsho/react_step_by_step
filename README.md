@@ -26,7 +26,8 @@ React 有个基本认识；
 * [lesson102](./lesson102/README.md) Node.js 及 npm 简单介绍
 * [lesson103](./lesson103/README.md) Babel 及 webpack 打包
 * [lesson104](./lesson104/README.md) ESLint 语法检查
-* [lesson105](./lesson105/README.md) Todo List v2.0
+* [lesson105](./lesson105/README.md) 完整的开发环境
+* [lesson106](./lesson106/README.md) Todo List v2.0
 * Flux
 * MobX
 * Redux

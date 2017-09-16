@@ -1,4 +1,4 @@
-# Todo List v2.0
+# 完整的开发环境
 
 从这一章开始，我们要正式开始我们的 React 开发之旅了。简单的回顾一下，我们在前面提到了 npm Babel webpack 
 ESLint ，现在就让我们用这些工具从“零”搭建一个 React 的前端开发环境吧！
@@ -74,11 +74,9 @@ $ npm install --save-dev eslint-plugin-jsx-a11y eslint-plugin-react webpack webp
 }
 ```
 
-这里我们使用了 Airbnb 公司的规则，同时设定了运行环境是 `browser` 即浏览器环境，已解决 `document` 未定义的错误提示。
+这里我们使用了 Airbnb 公司的规则，同时设定了运行环境是 `browser` 即浏览器环境，以解决 `document` 未定义的警告提示。
 
 5. 设定 webpack 的配置文件 webpack.config.js :
-
-一些之前没用到的或者比较重要的配置的解释，我写在了注释里面。
 
 ```javascript
 var path = require('path');
@@ -171,6 +169,6 @@ alias: {
 经过以上三个简单的步骤，我们执行脚本 `npm run build` 和 `npm run deploy` 分别使用 webpack.config.js 和 
 webpack.production.js 进行打包，可以看到，打包后的代码从 765k 被压缩到了 154k (两个数据为改写 Todo List v2.0之前) 。
 
-## Todo List 的功能扩展
-
 ## 扩展阅读
+
+下一章: [Todo List v2.0](../lesson106/README.md)
