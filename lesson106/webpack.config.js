@@ -1,7 +1,11 @@
 var path = require('path');
 
+const entry = process.env.NODE_ENV === 'draft'
+  ? 'src/draft/index.jsx'
+  : 'src/index.jsx';
+
 module.exports = {
-  entry: path.resolve(__dirname, 'src/index.jsx'),
+  entry: path.resolve(__dirname, entry),
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -26,6 +30,5 @@ module.exports = {
   },
   devServer: {
     port: 9000,
-    contentBase: './src',
   }
 }
