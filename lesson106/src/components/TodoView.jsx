@@ -5,16 +5,16 @@ function TodoView({ todo, doer, markTodo, deleteTodo }) {
   const { name } = doer;
   return (
     <div className="todo-view">
-      <input
+      <span><input
         type="checkbox"
         checked={done}
         onClick={() => { markTodo(tid) }}
-      />
+      /></span>
       <span title={name}>{name}</span>
       <span title={content}>{content}</span>
-      <button
+      <span><button
         onClick={() => { deleteTodo(tid) }}
-      >x</button>
+      >x</button></span>
     </div>
   );
 }

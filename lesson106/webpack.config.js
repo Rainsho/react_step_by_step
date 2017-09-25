@@ -13,15 +13,19 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.jsx?$/,
-        loaders: 'eslint-loader',
-        include: path.resolve(__dirname, 'src'),
-      },
+      // {
+      //   enforce: 'pre',
+      //   test: /\.jsx?$/,
+      //   loaders: 'eslint-loader',
+      //   include: path.resolve(__dirname, 'src'),
+      // },
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
+      },
+      {
+        test: /\.css$/,
+        loader: ['style-loader', 'css-loader'],
       }
     ],
   },

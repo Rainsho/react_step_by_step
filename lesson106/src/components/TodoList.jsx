@@ -15,6 +15,12 @@ function TodoList({ todos, doers, markTodo, deleteTodo }) {
   });
   return (
     <div>
+      <div className="todo-title">
+        <span>done</span>
+        <span>user</span>
+        <span>content</span>
+        <span>delete</span>
+      </div>
       {views}
     </div>
   );

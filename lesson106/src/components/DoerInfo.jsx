@@ -17,7 +17,7 @@ export default class DoerInfo extends React.Component {
 
   handleLogout(e) {
     e.preventDefault();
-    this.props.logout();
+    this.setState({ name: '', pswd: '' }, this.props.logout);
   }
 
   handleLogin() {
