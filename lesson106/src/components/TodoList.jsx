@@ -3,7 +3,7 @@ import TodoView from './TodoView';
 
 function TodoList({ todos, doers, markTodo, deleteTodo }) {
   if (todos.length === 0) return null;
-  const views = todos.map(todo => {
+  const views = todos.map((todo) => {
     const doer = doers[todo.uid] || doers[0];
     return (<TodoView
       key={todo.tid}

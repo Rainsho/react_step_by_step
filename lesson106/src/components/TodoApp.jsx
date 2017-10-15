@@ -19,7 +19,7 @@ export default class TodoApp extends React.Component {
     this.addTodo = this.addTodo.bind(this);
     this.markTodo = this.markTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
-    for (let x of doers) {
+    for (const x of doers) {
       DOERS[x.uid] = x;
     }
   }
@@ -31,7 +31,7 @@ export default class TodoApp extends React.Component {
   login(name, pswd) {
     if (!name || !pswd) return this.setState({ errMsg: 'where is your password' });
     let doer = null;
-    for (let x in DOERS) {
+    for (const x in DOERS) {
       if (DOERS[x].name === name) {
         doer = DOERS[x];
         break;
@@ -69,10 +69,9 @@ export default class TodoApp extends React.Component {
 
   markTodo(tid) {
     let todos = [...this.state.todos];
-    todos = todos.map(x => {
+    todos = todos.map((x) => {
       if (x.tid !== tid) return x;
-      x.done = !x.done;
-      return x;
+      return { ...x, done: !x.done };
     });
     this.setState({ todos });
   }

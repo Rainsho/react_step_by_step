@@ -40,11 +40,11 @@ export default class DoerInfo extends React.Component {
         <label>name: </label><input
           type="text"
           value={this.state.name}
-          onChange={(e) => this.handleInput('name', e)}
+          onChange={(e) => { this.handleInput('name', e); }}
         /><label>password: </label><input
           type="text"
           value={this.state.pswd}
-          onChange={(e) => this.handleInput('pswd', e)}
+          onChange={(e) => { this.handleInput('pswd', e); }}
         /><button onClick={this.handleLogin}>Regist/Login</button>
         {errMsg && <span>{errMsg}</span>}
       </div>

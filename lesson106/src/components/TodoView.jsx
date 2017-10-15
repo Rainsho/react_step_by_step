@@ -8,12 +8,12 @@ function TodoView({ todo, doer, markTodo, deleteTodo }) {
       <span><input
         type="checkbox"
         checked={done}
-        onClick={() => { markTodo(tid) }}
+        onClick={() => { markTodo(tid); }}
       /></span>
       <span title={name}>{name}</span>
       <span title={content}>{content}</span>
       <span><button
-        onClick={() => { deleteTodo(tid) }}
+        onClick={() => { deleteTodo(tid); }}
       >x</button></span>
     </div>
   );
