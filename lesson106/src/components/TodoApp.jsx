@@ -26,6 +26,16 @@ export default class TodoApp extends React.Component {
 
   componentDidMount() {
     this.setState({ todos: [...todos] });
+    // fetch('/api/data.json')
+    //   .then(x => x.json())
+    //   .then((data) => {
+    //     const todos = data.todos;
+    //     this.setState({ todos });
+    //   })
+    //   .catch((e) => {
+    //     console.warn(e);
+    //     this.setState({ todos: [...todos] });
+    //   });
   }
 
   login(name, pswd) {

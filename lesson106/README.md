@@ -241,8 +241,118 @@ demo 跑起来了。
 
 下面结合代码，对组件间的联系和大体的实现思路做个简要的分析。
 
-1. 配置文件
+### 配置文件
 
+这里针对一些之前没有用到过的配置做简单说明。
 
+1. 首选是 `.babelrc` 我们在之前的两个 preset 的基础上加入了 `stage-0` 用来支持 ES2015 Stage 0 阶段功能的转码。关于各个阶段
+的定义可以参考扩展阅读 1 里面阮大神的介绍。这里引入对 Stage 0 的支持，主要是为了支持对象的解构 (即 `...` 语法) ，关于对象的
+解构同样可以参考阮大神在《ES6 标准入门》里的介绍 (没看过的强烈建议通读一遍) 。
+
+2. 其次是 `.eslintrc` 前面我们讲过，可以在 `rules` 自定义需要覆盖的检查规则。于是这里面我们屏蔽了几条影响不是很大，但改起来比较
+麻烦的检查规则，比如 `react/prop-types` 要求要为 SFC (纯函数组件) 指定 porps 的类型，`consistent-return` 要求一个方法
+从不 `return` 或者总能显式的 `return` 值。其实屏蔽的根本原因还是这是一个半成品的 demo (从 CRUD 的角度来看，这里只有 CUD) ，
+所以会有很多设计不合理的临时解决方案，在后面的版本这些都会陆续完善。
+
+3. 接着是 `webpack.config.js` 文件，我们在 `module` 里面加入了 `css-loader` 和 `style-loader` 前者用来打包 CSS 文件，后者
+用来生成插入 CSS 样式的 JS 代码。
+
+4. 最后是 `package.json` 文件，我们在 `scripts` 里面加了 `draft` 这里通过 `export NODE_ENV=draft` 将 node.js 的环境变量
+设置为 `draft` ，由于 webpack 实际上是在 node.js 环境下执行的，这样我们在 `webpack.config.js` 里面就可以拿到 `NODE_ENV` 
+变量，从而决定打包的入口文件是哪个。因为笔者的系统是 macOS 系统，这里可能有一个潜在的**系统差异**，如果运行 `npm run draft` 
+打包的不是静态页面，可以尝试将 `export NODE_ENV=draft` 改为 `set NODE_ENV=draft` 即对于 Windows 系统下的环境变量设置。
+
+### 编码文件
+
+1. [index.jsx](./src/index.jsx)
+
+我们从入口文件看起，在 `index.jsx` 里面，我们通过 `import '../res/style/main.css'` 引入了全局的样式文件交给 webpack 进行打包，
+同时通过 `ReactDOM.render` 将我们封装好的 `TodoApp` 挂载到 `id="root"` 的 DMO 节点下。
+
+2. [TodoApp.jsx](./src/components/TodoApp.jsx)
+
+`TodoApp` 是第一级组件，主要负责引入数据和组合组件。同时实现了对数据 (主要是 `doers` 和 `todos` 两个集合) 的增、删、改等操作 
+(`addTodo` / `deleteTodo` / `markTodo`) ，并且负责将这些方法传递至对应的子组件内。具体到代码如下。
+
+首选在代码的头部，我们做了一些引入。
+
+```javascript
+// 引入数据 (更实际的方法是发送异步请求获得数据)
+import { doers, todos } from '../../api/data';
+// 引入将要用到的子组件
+import DoerInfo from './DoerInfo';
+import AddTodo from './AddTodo';
+import TodoList from './TodoList';
+// 定义一个空对象，用来对原始数据进行适当的包装或者结构转换
+const DOERS = {};
+```
+
+在构造函数中，我们做了 state 的初始化，并且为业务方法绑定了上下文，同时对原始数据做简单的结构转换。为方法绑定上下文，放到这里是因为 
+`bind()` 方法每次返回的都是一个新函数这样的写法 `<AddTodo addTodo={this.addTodo.bind(this)} />` 会使 `AddTodo` 组件在其 
+`componentWillReceiveProps` 生命周期里，每次的 `nextProps.addTodo != this.props.addTodo` 从而每次父组件的 reRender 
+都会造成子组件也去 reRender 。而使用在构造函数内绑定上下文后的写法 `<AddTodo addTodo={this.addTodo} />` ，只需要在子组件的 
+`shouldComponentUpdate` 方法里面做一个合适的潜比较就可以减少不不要的 reRender 。
+
+```javascript
+constructor(props) {
+  super(props);
+  // 指定初始化的 state
+  this.state = {
+    todos: [],
+    doer: null,
+    errMsg: null,
+  };
+  // 为方法绑定上下文
+  this.login = this.login.bind(this);
+  this.logout = this.logout.bind(this);
+  this.addTodo = this.addTodo.bind(this);
+  this.markTodo = this.markTodo.bind(this);
+  this.deleteTodo = this.deleteTodo.bind(this);
+  // 对原始数据做简单的结构转换
+  // 考虑到 doer 没有删改功能，姑且可以这样设计数据结构 (编码一直没有最好，只有更合理，这里先这样用吧，其实我有个更好的设计思路)
+  for (const x of doers) {
+    DOERS[x.uid] = x;
+  }
+}
+```
+
+在生命周期中，由于这个 demo 总体比较简单，所以只用到了 `componentDidMount` 这一个生命周期相关的方法，至于 `render` 方法，也无
+非是按我们 thinking-in-react 里面理的做一个组件的组合这里便不展开了。在 `componentDidMount` 内部，我们将拿到的原始数据更新到 
+state 中 从而使 `TodoApp` 重新渲染出我们的内容。获得原始数据更多的时候是使用 AJAX 进行异步请求，如果你是用 `webpack-dev-server` 
+启动的项目，可以把下面注释掉的代码放开即可。这里用 `fetch` 的方法发送了一个请求，并将拿到的数据更新到了 state 中 (这里把第一个数据
+删除了以示区分) 。关于 `fetch` 的内容这里不做展开，有兴趣的可以参看扩展阅读 3 。
+
+```javascript
+componentDidMount() {
+  // 将拿到的原始数据更新到 state 中
+  this.setState({ todos: [...todos] });
+  // 使用 AJAX 请求数据
+  // fetch('/api/data.json')
+  //   .then(x => x.json())
+  //   .then((data) => {
+  //     const todos = data.todos;
+  //     this.setState({ todos });
+  //   })
+  //   .catch((e) => {
+  //     console.warn(e);
+  //     this.setState({ todos: [...todos] });
+  //   });
+}
+```
+
+最后是一些简单的业务功能，通过简单的注释做一说明。
+
+```javascript
+
+```
+
+3. [DoerInfo.jsx](./src/components/DoerInfo.jsx)
+4. [AddTodo.jsx](./src/components/AddTodo.jsx)
+5. [TodoList.jsx](./src/components/TodoList.jsx)
+6. [TodoView.jsx](./src/components/TodoView.jsx)
 
 ## 扩展阅读
+
+1. [阮一峰: ES6入门#语法提案的批准流程](http://es6.ruanyifeng.com/#docs/intro#语法提案的批准流程)
+1. [阮一峰: ES6入门#对象的扩展运算符](http://es6.ruanyifeng.com/#docs/object#对象的扩展运算符)
+1. [传统 Ajax 已死，Fetch 永生](https://github.com/camsong/blog/issues/2)
