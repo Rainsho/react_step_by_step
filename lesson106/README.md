@@ -340,19 +340,174 @@ componentDidMount() {
 }
 ```
 
-最后是一些简单的业务功能，通过简单的注释做一说明。
+最后是一些简单的业务功能，基本上就是按第一部分总结的表格里面实现的，部分可能不是很明确的代码在下面做个补充说明。
 
 ```javascript
+/**
+ * login 登陆/注册
+ * @param {string} name 用户名
+ * @param {string} pswd 密码
+ * 
+ * 代码流程:
+ * 1. name 或 pswd 为空时提示对应错误并结束
+ * 2. 在用户列表内匹配用户名一致的用户
+ * 3. 若无法匹配则新建用户并结束
+ * 4. 若匹配到对应用户则比较密码是否正确
+ * 5. 若密码正确则设置改用户为登陆用户并清空错误提示
+ * 6. 若密码不正确则提示对应错误
+ */
+login(name, pswd) {
+  // ...
+  if (!doer) {                                  // 当在用户列表内查询不到改用户时新建一个用户
+    doer = { name, pswd };                      // 设置新 doer 的用户名和密码
+    const uids = Object.keys(DOERS);            // 获得用户列表内所用的 uid
+    doer.uid = uids[uids.length - 1].uid + 1;   // 设置新用户的 uid 为最大 uid + 1
+    DOERS[doer.uid] = doer;                     // 将新用户插入用户列表
+    this.setState({ doer, errMsg: '' });        // 设置新用户为登陆用户同时清空错误提示信息
+    return;
+  }
+  // ...
+}
 
+/**
+ * markTodo 修改 todo 状态
+ * @param {number} tid todo 的 id
+ */
+markTodo(tid) {
+  let todos = [...this.state.todos];            // 复制原 todo 集合
+  todos = todos.map((x) => {                    // 遍历操作
+    if (x.tid !== tid) return x;                // 若当前 tid 与需要标记的 tid 不一致则返回原对象
+    return { ...x, done: !x.done };             // 若当前 tid 与需要标记的 tid 一致则将其状态取反后返回
+  });
+  this.setState({ todos });
+}
+
+logout() {/* ... */}                             // 注销
+addTodo(content) {/* ... */}                     // 新增 todo
+deleteTodo(tid) {/* ... */}                      // 删除 todo
 ```
 
 3. [DoerInfo.jsx](./src/components/DoerInfo.jsx)
+
+`DoerInfo` 主要用来进行注册/登陆的控制，它接收 `TodoApp` 传入的当前登陆用户信息 (`doer`) 、错误提示信息 (`errMsg`) 
+以及登陆/登出方法 (`login` / `logout`) 。
+
+```javascript
+<DoerInfo
+  doer={doer}
+  errMsg={errMsg}
+  login={this.login}
+  logout={this.logout}
+/>
+```
+
+同时，为了使输入数据源可追溯，我们使用了受控组件对其进行约束。用户名和密码输入框 `input` 的 `value` 与自身 `state` 绑定。
+
+```javascript
+constructor(props) {
+  // ...
+  // 指定初始化的 state
+  this.state = {
+    name: '',
+    pswd: '',
+  };
+  // ...
+}
+
+render() {
+  // ...
+  // input 指定 value={this.state.name} 实现单向绑定
+  <label>name: </label><input
+    type="text"
+    value={this.state.name}
+    onChange={(e) => { this.handleInput('name', e); }}
+  /><label>password: </label><input
+    type="text"
+    value={this.state.pswd}
+    onChange={(e) => { this.handleInput('pswd', e); }}
+  />
+  // ...
+}
+
+// 通过为 input 绑定 onChange 方法实现双向绑定
+handleInput(key, e) {
+  this.setState({ [key]: e.target.value });
+}
+```
+
+登陆和登出操作，分别调用父组件传入的相关方法。
+
+```javascript
+handleLogout(e) {
+  // 阻止 <a> 标签的默认事件
+  e.preventDefault();
+  // 清空输入框后在回调内执行父组件传入的登出方法
+  this.setState({ name: '', pswd: '' }, this.props.logout);
+}
+
+handleLogin() {
+  // 因为单向绑定，此时该组件 state 内的 name 和 pswd 为唯一可信数据源
+  const { name, pswd } = this.state;
+  // 将 state 内的数据作为入参传递给父组件传入的登入方法
+  this.props.login(name, pswd);
+}
+```
+
 4. [AddTodo.jsx](./src/components/AddTodo.jsx)
+
+`AddTodo` 用来添加 todo ，其接收父组件传入的添加 todo 的方法，同时自身维护一个作为 todo 正文的 state ，输入框作为
+受控组件处理与 `DoerInfo` 中类似，这里就不再赘述。
+
 5. [TodoList.jsx](./src/components/TodoList.jsx)
+
+`TodoList` 这里作为一个 SFC (无状态函数组件) 进行处理，其接收 `TodoApp` 传入的 todo 集合 (`todos`) ，用户列表集合 
+(`doers`) ，以及标记和删除 todo 的两个方法 (`markTodo` / `deleteTodo`) 。
+
+ps: 其实用户列表集合算一个设计失误，改变一下 todo 的结构即可省去这个数据。
+
+```javascript
+<TodoList
+  todos={todos}
+  doers={DOERS}
+  markTodo={this.markTodo}
+  deleteTodo={this.deleteTodo}
+/>
+```
+
+当 `todos` 不为空时调用 `TodoView` 组件进行展示，并且将 `markTodo` 和 `deleteTodo` 方法继续向下传递给 `TodoView` 组件。
+
+```javascript
+const views = todos.map((todo) => {
+  const doer = doers[todo.uid] || doers[0];   // 当前 todo 的用户不存在是使用默认匿名用户
+  return (<TodoView                           // 返回 <TodoView /> 组件
+    key={todo.tid}                            // 唯一的 key 提高标记等操作的效率
+    todo={todo}                               // 当前 todo 的相关信息
+    doer={doer}                               // 当前 todo 的作者
+    markTodo={markTodo}                       // `TodoApp` 传入的标记 todo 的方法
+    deleteTodo={deleteTodo}                   // `TodoApp` 传入的删除 todo 的方法
+  />);
+});
+```
+
 6. [TodoView.jsx](./src/components/TodoView.jsx)
+
+`TodoView` 这里也是一个 SFC (无状态函数组件) 同时也是一个标准的 UI 组件，其作用就是根据传入的 `todo` 和 `doer` 渲染
+对应的 DOM 结构，同时将 `markTodo` 和 `deleteTodo` 方法绑定到对应的 DOM 中。
+
+## 小结
+
+到这里我们的项目就算基本完成了，算上使用 `fetch` 去加载数据，我们的项目包含了完整的在前端进行的增删查改功能。我们从组件拆分、 
+组件组合到 state 设计、交互设计，基本上理了一遍从无到有的 React 设计思路。当然也有很多待完善的地方，比如 `todo` 的结构可以考虑
+将 `uid` 换成 `uname`， id 的生成和管理可以使用类似 `uuid` 的第三方库等。当然，最大的问题应该是这里 React 既充当了 View 层的
+角色又充当了 Controller 层的角色，所以我们会看到在如此简单的一个 demo 中，仍然会有诸如 `markTodo` 这样的方法经历多次传递的情况，
+也会有诸如 `errMsg` 这样的属性让人很纠结到底放在 `TodoApp` 里面合适还是 `DoerInfo` 里面更合适的问题。接下来的内容，我们会逐步
+解决上面的几个问题，通过引入基于 Flux 模式的第三方框架，更好的拆分业务功能，让 React 仅专注于其擅长的 View 层的渲染。
 
 ## 扩展阅读
 
 1. [阮一峰: ES6入门#语法提案的批准流程](http://es6.ruanyifeng.com/#docs/intro#语法提案的批准流程)
 1. [阮一峰: ES6入门#对象的扩展运算符](http://es6.ruanyifeng.com/#docs/object#对象的扩展运算符)
 1. [传统 Ajax 已死，Fetch 永生](https://github.com/camsong/blog/issues/2)
+1. [ESLint Rules](https://eslint.org/docs/rules/)
+
+下一章: [Flux](../lesson107/README.md)

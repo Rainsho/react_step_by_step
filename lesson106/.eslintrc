@@ -6,7 +6,7 @@
     "jsx-a11y/label-has-for": "off",
     "no-restricted-syntax": "off",
     "react/no-did-mount-set-state": "off",
-    "consistent-return": "off",
+    // "consistent-return": "off",
     "no-shadow": "off"
   },
   "env": {

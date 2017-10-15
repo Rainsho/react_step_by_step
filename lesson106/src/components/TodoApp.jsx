@@ -39,7 +39,10 @@ export default class TodoApp extends React.Component {
   }
 
   login(name, pswd) {
-    if (!name || !pswd) return this.setState({ errMsg: 'where is your password' });
+    if (!name || !pswd) {
+      this.setState({ errMsg: 'where is your password' });
+      return;
+    }
     let doer = null;
     for (const x in DOERS) {
       if (DOERS[x].name === name) {
