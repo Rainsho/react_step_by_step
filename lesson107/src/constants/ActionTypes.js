@@ -1,0 +1,7 @@
+const LOGIN = 'LOGIN';
+const LOGOUT = 'LOGOUT';
+const ADD_TODO = 'ADD_TODO';
+const MARK_TODO = 'MARK_TODO';
+const DELETE_TODO = 'DELETE_TODO';
+
+export { LOGIN, LOGOUT, ADD_TODO, MARK_TODO, DELETE_TODO };
