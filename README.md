@@ -28,8 +28,8 @@ React 有个基本认识；
 * [lesson104](./lesson104/README.md) ESLint 语法检查
 * [lesson105](./lesson105/README.md) 完整的开发环境
 * [lesson106](./lesson106/README.md) Todo List v2.0
-* Flux
-* MobX
+* [lesson107](./lesson107/README.md) Flux
+* [lesson108](./lesson108/README.md) MobX
 * Redux
 * Ant-Design
 * Node.js 后台
