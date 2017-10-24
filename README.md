@@ -30,7 +30,7 @@ React 有个基本认识；
 * [lesson106](./lesson106/README.md) Todo List v2.0
 * [lesson107](./lesson107/README.md) Flux
 * [lesson108](./lesson108/README.md) MobX
-* Redux
+* [lesson109](./lesson109/README.md) Redux
 * Ant-Design
 * Node.js 后台
 
