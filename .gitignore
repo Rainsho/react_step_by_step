@@ -3,3 +3,4 @@ node_modules
 */dist/*
 !*/dist/.gitkeep
 lint-results.html
+lesson109/package-lock.json
