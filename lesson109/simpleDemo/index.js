@@ -50,10 +50,10 @@ function counterSub(state = initState,action){
 const counter = combineReducers({counterAdd,counterSub})
 
 const logger = createLogger();
-let store = createStore(counter,
+let store = createStore(counter,initState,
 applyMiddleware(logger));
 
-store.subscribe(() => console.log(store.getState()));
+store.subscribe(() => console.log(store.getState().counterAdd.counter,store.getState().counterSub.counter));
 
 store.dispatch({ type: 'INCREMENT'});
 store.dispatch({ type: 'INCREMENT'});
