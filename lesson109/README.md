@@ -22,7 +22,7 @@ Store简单来说就是数据存储的地方。一个应用有一个Store！一�
    - store.dispatch();
    - store.subscribe();
 3. Reducer
-Reducer是行为的抽象，接受一个初始化的State，和view发出的Action，然后生成NewState。Reducer只能是一个＊纯方法＊，这意味着相同的state＋同一个Action多次触发Reducer得到的NewState必然是一样的。不要修改state，返回新的state。
+Reducer是行为的抽象，接受一个初始化的State，和view发出的Action，然后生成NewState。Reducer只能是一个*纯方法*，这意味着相同的state＋同一个Action多次触发Reducer得到的NewState必然是一样的。不要修改state，返回新的state。
 ```
 const defaultState = 0;
 const reducer = (state = defaultState, action) => {
