@@ -15,8 +15,8 @@ export default function TodoReducer(state = initState, action) {
   let name;
   let pswd;
   let tid;
-  let content;
   let uname;
+  let content;
   const tempState = state;
   switch (action.type) {
     case LOGIN:
