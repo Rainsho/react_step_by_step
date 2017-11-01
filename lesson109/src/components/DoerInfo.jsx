@@ -25,7 +25,7 @@ export default class DoerInfo extends React.Component {
     this.props.login(this.state.name, this.state.pswd);
   }
 
-   handleRegister() {
+  handleRegister() {
     this.props.register(this.state.name, this.state.pswd);
   }
 
