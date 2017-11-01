@@ -1,0 +1,67 @@
+import { LOGIN, LOGOUT, ADD_TODO, MARK_TODO, DELETE_TODO, REGISTER } from '../constants/ActionTypes';
+import { todos, doers } from '../constants/MockData';
+import uuid from 'uuid';
+import find from 'lodash/find';
+
+const  initState = {
+  todos,
+  doers,
+  doer: null,
+  errMsg: null,
+}
+
+export default function TodoReducer(state = initState, action) {
+  let doer, name, pswd, tid;
+  switch (action.type) {   
+   case LOGIN:
+      name = action.payload.name;
+      pswd = action.payload.pswd;
+      doer = find(state.doers, { name });
+      if (doer){
+        if (doer.pswd === pswd) {
+          state.doer = doer;
+        } else {
+          state.errMsg = 'password do not match';
+        }
+      }else{
+        state.errMsg = 'user not exist!';
+      }
+      return Object.assign({},state)
+   case LOGOUT:
+      state.doer = null;
+      state.errMsg = '';
+      return Object.assign({},state)
+   case REGISTER:
+      name = action.payload.name;
+      pswd = action.payload.pswd;
+      doer = find(state.doers, { name });
+      if(doer){
+        state.errMsg = 'User have been exist, please login';
+      }else{
+        doer = { uid: uuid.v4(), name, pswd };
+        state.doer = doer;
+        state.doers.push(doer);
+      }
+      return Object.assign({},state)
+    case ADD_TODO:
+      const { content } = action.payload;
+      const uname = state.doer
+        ? state.doer.name
+        : state.doers[0].name;
+      state.todos.push({ tid: uuid.v4(), done: false, uname, content });
+      return Object.assign({},state);
+     case MARK_TODO:
+       tid = action.payload.tid;
+       state.todos = state.todos.map((x) => {
+          if (x.tid !== tid) return x;
+          return { ...x, done: !x.done };
+        });
+        return Object.assign({},state);
+      case DELETE_TODO:
+        tid = action.payload.tid;
+        state.todos = state.todos.filter(x => x.tid !== tid);
+        return Object.assign({},state);
+    default:
+      return state
+  }
+}
