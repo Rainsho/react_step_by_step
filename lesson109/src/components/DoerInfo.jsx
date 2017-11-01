@@ -1,32 +1,15 @@
 import React from 'react';
-import store from '../stores/TodoStore';
-import action from '../actions/TodoAction';
-import { DOER_CHANGE } from '../constants/TodoEvents';
 
 export default class DoerInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      doer: store.getDoer(),
-      errMsg: store.getErrMsg(),
       name: '',
       pswd: '',
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
-  }
-
-  componentDidMount() {
-    store.on(DOER_CHANGE, () => {
-      this.setState({
-        doer: store.getDoer(),
-        errMsg: store.getErrMsg(),
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    store.removeListener(DOER_CHANGE);
+    this.handleRegister = this.handleRegister.bind(this);
   }
 
   handleInput(key, e) {
@@ -35,16 +18,19 @@ export default class DoerInfo extends React.Component {
 
   handleLogout(e) {
     e.preventDefault();
-    this.setState({ name: '', pswd: '' }, action.logout);
+    this.setState({ name: '', pswd: '' }, this.props.logout);
   }
 
   handleLogin() {
-    const { name, pswd } = this.state;
-    action.login(name, pswd);
+    this.props.login(this.state.name, this.state.pswd);
+  }
+
+   handleRegister() {
+    this.props.register(this.state.name, this.state.pswd);
   }
 
   render() {
-    const { doer, errMsg } = this.state;
+    const { doer, errMsg } = this.props.data;
     if (doer) {
       return (
         <div className="doer-info-welcome">
@@ -63,7 +49,8 @@ export default class DoerInfo extends React.Component {
           type="text"
           value={this.state.pswd}
           onChange={(e) => { this.handleInput('pswd', e); }}
-        /><button onClick={this.handleLogin}>Regist/Login</button>
+        /><button onClick={this.handleLogin}>Login</button>
+        <button onClick={this.handleRegister}>Register</button>
         {errMsg && <span>{errMsg}</span>}
       </div>
     );
