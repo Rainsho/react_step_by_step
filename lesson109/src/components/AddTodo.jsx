@@ -1,5 +1,4 @@
 import React from 'react';
-import action from '../actions/TodoAction';
 
 export default class AddTodo extends React.Component {
   constructor(props) {
@@ -16,10 +15,7 @@ export default class AddTodo extends React.Component {
   }
 
   handleSubmit() {
-    const content = this.state.content;
-    this.setState({ content: '' }, () => {
-      action.addTodo(content);
-    });
+    this.props.addTodo(this.state.content);
   }
 
   render() {
