@@ -1,19 +1,25 @@
 import React from 'react';
-import action from '../actions/TodoAction';
 
-function TodoView({ todo }) {
+function TodoView({ todo , deleteTodo, mark}) {
   const { tid, uname, done, content } = todo;
+
+  function handleDelete() {
+    deleteTodo(tid);
+  };
+
+  function handleMark() {
+    mark(tid);
+  };
   return (
     <div className="todo-view">
       <span><input
         type="checkbox"
         checked={done}
-        onClick={() => { action.markTodo(tid); }}
+        onClick={handleMark}
       /></span>
       <span title={uname}>{uname}</span>
       <span title={content}>{content}</span>
-      <span><button
-        onClick={() => { action.deleteTodo(tid); }}
+      <span><button  onClick={handleDelete}
       >x</button></span>
     </div>
   );
