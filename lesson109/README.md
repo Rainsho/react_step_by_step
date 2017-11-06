@@ -71,12 +71,12 @@ Reducer是行为的抽象，接受一个初始化的State，和view发出的Acti
 
 ## How
 了解了Redux及其基本概念以及使用Redux的种种好处之后，简单介绍一下如何使用Redux，如何将Redux和React相结合使用。Redux本身和React没有必然联系，React是一个View层解决方案，Redux是数据层方案，如果要在项目中讲Redux和React相结合，需要一个新的第三方框架React—Redux。
-    - React-Redux
-        - 简介 
-        - Provider
-        - Connect
-    - 应用步骤
 
+    - React-Redux
+        - 简介
+        - Provider
+        - Connect
+    - 应用步骤
 
 
 ## 代码解析
