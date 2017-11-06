@@ -3,7 +3,7 @@
 
 ## Target audiences
 - 本文你需要拥有React基础，如果了解Flux则更好；
-- 单的Node基础，能够使用node npm等命令；
+- Node基础，能够使用node npm等命令；
 
 ## What
 正如Rainsho在lesson107中说的，React是一个View层解决方案，并不适合大型应用，处理复杂的组件间通信会变的一团乱麻。所以2014年Facebook提出了Flux架构的概念，而Redux是Flux的一个社区实现，发布后很短时间内就成为了最热门的前端框架。
