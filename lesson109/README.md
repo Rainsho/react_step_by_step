@@ -21,7 +21,7 @@ Action是行为的抽象，是一个简单的JS对象，所有的Action都必须
       };
     }
     ```
-
+    
 2. Store
 Store简单来说就是数据存储的地方,Action作用于Store，然后Store根据Action找到对应的Reducer来处理，根据Rducer反回的新State作用于View的渲染。一个应用有一个Store！一个应用只有一个Store！一个应用只有一个Store！Store有以下几个主要的API:
    - createStore();用于创建Store，入参通常是整个项目的根Reducer。
@@ -66,7 +66,6 @@ Reducer接收连个参数，初始化state和action,根据action type进行对�
         }
      ```
   
- 
    Reducer负责生成State，整个应用只有一个State，对大型应用来说必然及其庞大，Redux为此提供了一个combineReducers方法，用于拆分Reducer，从而可以更加细粒度的控制组件State，从而更好的管理组件状态。详细使用方式可以参考simpleDemo下的index.js文件中的用法。
    
 4. middleware
@@ -82,60 +81,60 @@ Reducer接收连个参数，初始化state和action,根据action type进行对�
     simpleDemo下的简单Demo是一个后端代码，可以使用简单的命令行来进行运行验证。执行 `npm install` 安装运行所依赖的第三方库。在simpleDemo目录下运行 `npm index.js `。
     
     创建counterAdd，counterSub两个Reducer，使用combineReducers将两个reducers合并为一个。使用createStore()来创建store，改函数拥有三个参数，第一个是应用的reducer，第二个是初始化state(可以不传，如果传入会覆盖ruducer中的state),第三个参数传入要引用的中间件。然后使用subscribe方法订阅标准输出，输出当前state中两个reducer中的counter数据(每一个reducer中的state在store中都有一个与reducer同名的对象保存，所有reducer中的数据共同组成store中的数据)。使用dispatch方法主动触发action，此时可以看到标准输出中state的信息以及日志信息，日志辅助输出执行action之前的state，执行了什么action以及执行action之后的state。
-    
-    ```
-     const createStore = require('redux').createStore;
-        const applyMiddleware = require('redux').applyMiddleware;
-        const combineReducers = require('redux').combineReducers;
-        const createLogger = require('redux-logger').createLogger;
+       
+  ```
+    const createStore = require('redux').createStore;
+    const applyMiddleware = require('redux').applyMiddleware;
+    const combineReducers = require('redux').combineReducers;
+    const createLogger = require('redux-logger').createLogger;
 
-        //初始化的state
-        const initState = {
-          counter:0
-        }
+    //初始化的state
+    const initState = {
+      counter:0
+    }
 
-        //将counter拆分成两个reducer，这里业务上并不需要，只是为了演示combineReducers api做的简单拆分
-        function counterAdd(state = initState,action){
-          switch(action.type){
-            case 'INCREMENT':
-              let counter = state.counter + 1;
-              let temp = {counter : counter}
-              return Object.assign({},state,temp)
-            default:
-              return state
-          }
-        }
+    //将counter拆分成两个reducer，这里业务上并不需要，只是为了演示combineReducers api做的简单拆分
+    function counterAdd(state = initState,action){
+      switch(action.type){
+        case 'INCREMENT':
+          let counter = state.counter + 1;
+          let temp = {counter : counter}
+          return Object.assign({},state,temp)
+        default:
+          return state
+      }
+    }
 
-        function counterSub(state = initState,action){
-          switch(action.type){
-            case 'DECREMENT':
-              let counter1 = state.counter - 1;
-              let temp1 = {counter : counter1}
-              return Object.assign({},state,temp1)
-            default:
-              return state
-          }
-        }
+    function counterSub(state = initState,action){
+      switch(action.type){
+        case 'DECREMENT':
+          let counter1 = state.counter - 1;
+          let temp1 = {counter : counter1}
+          return Object.assign({},state,temp1)
+        default:
+          return state
+      }
+    }
 
-        //使用combineReducers 将拆分后的reducer合并成一个
-        const counter = combineReducers({counterAdd,counterSub})
+    //使用combineReducers 将拆分后的reducer合并成一个
+    const counter = combineReducers({counterAdd,counterSub})
 
-        //定义日志中间件logger
-        const logger = createLogger();
+    //定义日志中间件logger
+    const logger = createLogger();
 
-        //使用createStore()创建Store，应用logger中间件
-        let store = createStore(counter,initState,
-        applyMiddleware(logger));
+    //使用createStore()创建Store，应用logger中间件
+    let store = createStore(counter,initState,
+    applyMiddleware(logger));
 
-        //订阅，每当store发生变化时候出发函数调用
-        store.subscribe(() => console.log(store.getState().counterAdd.counter,store.getState().counterSub.counter));
+    //订阅，每当store发生变化时候出发函数调用
+    store.subscribe(() => console.log(store.getState().counterAdd.counter,store.getState().counterSub.counter));
 
-        //使用dispatch分发action，这里是手动触发，真实业务场景中一般使用页面的事件进行触发
-        store.dispatch({ type: 'INCREMENT'}); 
-        store.dispatch({ type: 'INCREMENT'});
-        store.dispatch({ type: 'DECREMENT'});
-    ```
-
+    //使用dispatch分发action，这里是手动触发，真实业务场景中一般使用页面的事件进行触发
+    store.dispatch({ type: 'INCREMENT'}); 
+    store.dispatch({ type: 'INCREMENT'});
+    store.dispatch({ type: 'DECREMENT'});
+  ```
+  
 ## 总结
 文章对Redux基本概念和如何使用做了简单的介绍，同时结合React，Redux，React-Redux对Todo APP做了Redux版本的实现，能够让读者对Redux和Redux的使用有简单的认识和了解，能够给读者在实践中是否引入Redux以及如何引入Redux做了简单的介绍。关于Redux仍然有很多可以拓展的，但是遵循2-8原则，这里能覆盖80%的使用场景。这里没有覆盖到，但是仍然应用比较广发的场景包括异步数据处理，Rainsho应该会在以后的章节中介绍，大家也可以参考扩展阅读进行学习。
 
