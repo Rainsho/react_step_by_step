@@ -82,58 +82,58 @@ Reducer接收连个参数，初始化state和action,根据action type进行对�
     simpleDemo下的简单Demo是一个后端代码，可以使用简单的命令行来进行运行验证。执行 `npm install` 安装运行所依赖的第三方库。在simpleDemo目录下运行 `npm index.js `。
     
     创建counterAdd，counterSub两个Reducer，使用combineReducers将两个reducers合并为一个。使用createStore()来创建store，改函数拥有三个参数，第一个是应用的reducer，第二个是初始化state(可以不传，如果传入会覆盖ruducer中的state),第三个参数传入要引用的中间件。然后使用subscribe方法订阅标准输出，输出当前state中两个reducer中的counter数据(每一个reducer中的state在store中都有一个与reducer同名的对象保存，所有reducer中的数据共同组成store中的数据)。使用dispatch方法主动触发action，此时可以看到标准输出中state的信息以及日志信息，日志辅助输出执行action之前的state，执行了什么action以及执行action之后的state。
-    
+     
     ```
-    const createStore = require('redux').createStore;
-    const applyMiddleware = require('redux').applyMiddleware;
-    const combineReducers = require('redux').combineReducers;
-    const createLogger = require('redux-logger').createLogger;
+        const createStore = require('redux').createStore;
+        const applyMiddleware = require('redux').applyMiddleware;
+        const combineReducers = require('redux').combineReducers;
+        const createLogger = require('redux-logger').createLogger;
 
-    //初始化的state
-    const initState = {
-      counter:0
-    }
+        //初始化的state
+        const initState = {
+          counter:0
+        }
 
-    //将counter拆分成两个reducer，这里业务上并不需要，只是为了演示combineReducers api做的简单拆分
-    function counterAdd(state = initState,action){
-      switch(action.type){
-        case 'INCREMENT':
-          let counter = state.counter + 1;
-          let temp = {counter : counter}
-          return Object.assign({},state,temp)
-        default:
-          return state
-      }
-    }
+        //将counter拆分成两个reducer，这里业务上并不需要，只是为了演示combineReducers api做的简单拆分
+        function counterAdd(state = initState,action){
+          switch(action.type){
+            case 'INCREMENT':
+              let counter = state.counter + 1;
+              let temp = {counter : counter}
+              return Object.assign({},state,temp)
+            default:
+              return state
+          }
+        }
 
-    function counterSub(state = initState,action){
-      switch(action.type){
-        case 'DECREMENT':
-          let counter1 = state.counter - 1;
-          let temp1 = {counter : counter1}
-          return Object.assign({},state,temp1)
-        default:
-          return state
-      }
-    }
+        function counterSub(state = initState,action){
+          switch(action.type){
+            case 'DECREMENT':
+              let counter1 = state.counter - 1;
+              let temp1 = {counter : counter1}
+              return Object.assign({},state,temp1)
+            default:
+              return state
+          }
+        }
 
-    //使用combineReducers 将拆分后的reducer合并成一个
-    const counter = combineReducers({counterAdd,counterSub})
+        //使用combineReducers 将拆分后的reducer合并成一个
+        const counter = combineReducers({counterAdd,counterSub})
 
-    //定义日志中间件logger
-    const logger = createLogger();
+        //定义日志中间件logger
+        const logger = createLogger();
 
-    //使用createStore()创建Store，应用logger中间件
-    let store = createStore(counter,initState,
-    applyMiddleware(logger));
+        //使用createStore()创建Store，应用logger中间件
+        let store = createStore(counter,initState,
+        applyMiddleware(logger));
 
-    //订阅，每当store发生变化时候出发函数调用
-    store.subscribe(() => console.log(store.getState().counterAdd.counter,store.getState().counterSub.counter));
+        //订阅，每当store发生变化时候出发函数调用
+        store.subscribe(() => console.log(store.getState().counterAdd.counter,store.getState().counterSub.counter));
 
-    //使用dispatch分发action，这里是手动触发，真实业务场景中一般使用页面的事件进行触发
-    store.dispatch({ type: 'INCREMENT'}); 
-    store.dispatch({ type: 'INCREMENT'});
-    store.dispatch({ type: 'DECREMENT'});
+        //使用dispatch分发action，这里是手动触发，真实业务场景中一般使用页面的事件进行触发
+        store.dispatch({ type: 'INCREMENT'}); 
+        store.dispatch({ type: 'INCREMENT'});
+        store.dispatch({ type: 'DECREMENT'});
 
     ```
 
