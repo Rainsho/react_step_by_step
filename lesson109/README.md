@@ -78,8 +78,8 @@ Reducer接收连个参数，初始化state和action,根据action type进行对�
 ## 代码解析
     这里只对simpleDemo下的简单代码进行解析，来阐述Redux中概念以及api的使用，笔者同样使用Redux+React-Redux改造了Lesson106中的Todo App，供读者参考学习。
     
-    simpleDemo下的简单Demo是一个后端代码，可以使用简单的命令行来进行运行验证。执行 `npm install` 安装运行所依赖的第三方库。在simpleDemo目录下运行 `npm index.js `。
-    
+    simpleDemo下的简单Demo是一个后端代码，可以使用简单的命令行来进行运行验证。执行 `npm install` 安装运行所依赖的第三方库。在simpleDemo目录下运行 `npm index.js `  。
+    
     创建counterAdd，counterSub两个Reducer，使用combineReducers将两个reducers合并为一个。使用createStore()来创建store，改函数拥有三个参数，第一个是应用的reducer，第二个是初始化state(可以不传，如果传入会覆盖ruducer中的state),第三个参数传入要引用的中间件。然后使用subscribe方法订阅标准输出，输出当前state中两个reducer中的counter数据(每一个reducer中的state在store中都有一个与reducer同名的对象保存，所有reducer中的数据共同组成store中的数据)。使用dispatch方法主动触发action，此时可以看到标准输出中state的信息以及日志信息，日志辅助输出执行action之前的state，执行了什么action以及执行action之后的state。
        
   ```
