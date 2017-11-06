@@ -17,9 +17,9 @@ const addTodo = (payload) =>{
 2. Store
 Store简单来说就是数据存储的地方,Action作用于Store，然后Store根据Action找到对应的Reducer来处理，根据Rducer反回的新State作用于View的渲染。一个应用有一个Store！一个应用只有一个Store！一个应用只有一个Store！Store有以下几个主要的API:
 
-   - createStore();用于创建Store，入参通常是整个项目的跟Reducer。
+   - createStore();用于创建Store，入参通常是整个项目的根Reducer。
    - getState(); 用于获取当前应用的State。
-   - store.dispatch(); view通过该方法发出Action，如参是Action，Action通过该方法作用于Store。
+   - store.dispatch(); view通过该方法发出Action，入参是Action，Action通过该方法作用于Store。
    - store.subscribe(); 订阅一个监听器，当Store中State发生变化的时候触发监听器。
 3. Reducer
 Reducer是行为的抽象，接受一个初始化的State，和view发出的Action，然后生成NewState。Reducer只能是一个*纯方法*，这意味着相同的state＋同一个Action多次触发Reducer得到的NewState必然是一样的。不要修改state，返回新的state。
