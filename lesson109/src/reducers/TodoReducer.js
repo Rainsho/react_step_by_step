@@ -50,7 +50,7 @@ export default function TodoReducer(state = initState, action) {
       }
       return Object.assign({}, tempState);
     case ADD_TODO:
-      content = action.payload;
+      content = action.payload.content;
       uname = state.doer
         ? state.doer.name
         : state.doers[0].name;
