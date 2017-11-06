@@ -64,6 +64,7 @@ Reducer是行为的抽象，接受一个初始化的State，和view发出的Acti
     }
     ```
    Reducer负责生成State，整个应用只有一个State，对大型应用来说必然及其庞大，Redux为此提供了一个combineReducers方法，用于拆分Reducer，从而可以更加细粒度的控制组件State，从而更好的管理组件状态。详细使用方式可以参考simpleDemo下的index.js文件中的用法。
+   
 4. middleware
 
 ## Why
