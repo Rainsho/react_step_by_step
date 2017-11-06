@@ -1,7 +1,7 @@
 # Redux
 >只有遇到 React 实在解决不了的问题，你才需要 Redux.         --Dan Abramov 
 
-## Target audiences
+## 预备知识
 - 本文你需要拥有React基础，如果了解Flux则更好；
 - Node基础，能够使用node npm等命令；
 
@@ -31,6 +31,7 @@ Store简单来说就是数据存储的地方,Action作用于Store，然后Store�
 3. Reducer
 Reducer是行为的抽象，接受一个初始化的State，和view发出的Action，然后生成NewState。Reducer只能是一个*纯方法*，这意味着相同的state＋同一个Action多次触发Reducer得到的NewState必然是一样的。不要修改state，返回新的state，下面是Todo App中使用Reducer的截取部分用于处理用户登录的时候的Reducer。
 Reducer接收连个参数，初始化state和action,根据action type进行对应的数据处理，然后返回新的state。
+
     ```
     const initState = {
       todos,
