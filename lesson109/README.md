@@ -32,39 +32,41 @@ Store简单来说就是数据存储的地方,Action作用于Store，然后Store�
 Reducer是行为的抽象，接受一个初始化的State，和view发出的Action，然后生成NewState。Reducer只能是一个*纯方法*，这意味着相同的state＋同一个Action多次触发Reducer得到的NewState必然是一样的。不要修改state，返回新的state，下面是Todo App中使用Reducer的截取部分用于处理用户登录的时候的Reducer。
 Reducer接收连个参数，初始化state和action,根据action type进行对应的数据处理，然后返回新的state。
 
-    ```
-    const initState = {
-      todos,
-      doers,
-      doer: null,
-      errMsg: null,
-    };
+     ```
+       const initState = {
+          todos,
+          doers,
+          doer: null,
+          errMsg: null,
+        };
 
-    export default function TodoReducer(state = initState, action) {
-      let doer;
-      let name;
-      let pswd;
-      const tempState = state;
-      switch (action.type) {
-        case LOGIN:
-          name = action.payload.name;
-          pswd = action.payload.pswd;
-          doer = find(state.doers, { name });
-          if (doer) {
-            if (doer.pswd === pswd) {
-              tempState.doer = doer;
-            } else {
-              tempState.errMsg = 'password do not match';
-            }
-          } else {
-            tempState.errMsg = 'user not exist!';
+        export default function TodoReducer(state = initState, action) {
+          let doer;
+          let name;
+          let pswd;
+          const tempState = state;
+          switch (action.type) {
+            case LOGIN:
+              name = action.payload.name;
+              pswd = action.payload.pswd;
+              doer = find(state.doers, { name });
+              if (doer) {
+                if (doer.pswd === pswd) {
+                  tempState.doer = doer;
+                } else {
+                  tempState.errMsg = 'password do not match';
+                }
+              } else {
+                tempState.errMsg = 'user not exist!';
+              }
+              return Object.assign({}, tempState);
+            default:
+              return state;
           }
-          return Object.assign({}, tempState);
-        default:
-          return state;
-      }
-    }
-    ```
+        }
+     ```
+  
+ 
    Reducer负责生成State，整个应用只有一个State，对大型应用来说必然及其庞大，Redux为此提供了一个combineReducers方法，用于拆分Reducer，从而可以更加细粒度的控制组件State，从而更好的管理组件状态。详细使用方式可以参考simpleDemo下的index.js文件中的用法。
    
 4. middleware
