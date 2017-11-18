@@ -33,7 +33,7 @@ $ npm config set registry https://registry.npm.taobao.org/
 $ npm init
 # 安装 react react-dom babel-standalone 三个库
 # 并将依赖及版本信息保存至 package.json 中
-$ npm install --save react react-dom babel-standalone
+$ npm install --save react@15.6.1 react-dom@15.6.1 babel-standalone@6.26.0
 ```
 
 经过以上两步在当前文件夹生成的 package.json 大概长这样:
