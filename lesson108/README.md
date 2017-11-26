@@ -7,7 +7,7 @@
 
 ## MobX 概念介绍
 
-MobX 的官方定义是***简单、可扩展的状态管理***，和 Redux 类似， MobX 实际上只是一个**状态管理**工具，与 React 并无强关联，也可以
+MobX 的官方定义是 ***简单、可扩展的状态管理*** ，和 Redux 类似， MobX 实际上只是一个**状态管理**工具，与 React 并无强关联，也可以
 用在任意其他的前端项目中。 MobX 的核心是观察者模式，即 MobX 负责主动的观察 store 内被观察者 (`observable`) 的变化，一旦 store 
 有变化，观察者 (`observer`) 即刻察觉，从而产生对应的动作(在与 React 共同使用时，即时组件的重新渲染)。
 
@@ -149,6 +149,39 @@ MobX 官方推荐修饰器的用法，对要观察的类，直接添加 `@observ
 支持修饰器的使用。
 
 ## 常用 API 介绍
+
+1. `@observable`
+
+`@observable` 用来创建可被观察的对象，通常用在实例字段上。该字段可以是 JS 的基本数据类型也可以是复杂的对象 (包括普通对象、类实例和数组等) 。
+当被观察的值是对象时， MobX 实际上会克隆该对象，并把其所有属性都转化成可观察的。这里值得注意的是**对象上只有初始化时便存在的属性会转换成可观察的**，
+换言之，动态添加的属性是不会被观察的。(考虑到 JS 的弱语言性质，动态添加的属性依旧可以在 view 层进行引用，虽然对其的修改不会被观察到，但是当组件
+在其原因下重新 `render` 时，所做的修改依旧可以体现在 view 层面。这有点类似 React 中直接对 state 进行赋值的***反模式***)。
+
+```javascript
+class Store {
+  @@observable obj = { a: 1};
+}
+
+const store = new Store();
+
+@observer class App extends React.Component {
+  render() {
+    return (<div>
+        <h1>{this.props.store.obj.a}</h1>
+        <h1>{this.props.store.obj.b}</h1>
+      </div>);
+  }
+}
+
+store.obj.a = 2; // change 被观察 App 响应重新渲染
+store.obj.b = 3; // change 不被观察 App 不响应
+// 使用 API extendObservable 添加属性并转换成可观察的
+extendObservable(store, { obj: { a: 2, b: 3} });
+store.obj.a = 4; // change 被观察 App 响应重新渲染
+store.obj.b = 5; // change 被观察 App 响应重新渲染
+```
+
+2. `@computed`
 
 ## 代码解析
 

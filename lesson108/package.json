@@ -1,5 +1,5 @@
 {
-  "name": "lesson107",
+  "name": "lesson108",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -33,6 +33,7 @@
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-react": "7.3.0",
+    "open-browser-webpack-plugin": "0.0.5",
     "style-loader": "0.18.2",
     "webpack": "3.5.6",
     "webpack-dev-server": "2.7.1"

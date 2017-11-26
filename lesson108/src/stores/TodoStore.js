@@ -1,7 +1,9 @@
 import uuid from 'uuid';
 import find from 'lodash/find';
-import { observable, action } from 'mobx';
+import { observable, action, useStrict } from 'mobx';
 import { todos, doers } from '../constants/MockData';
+
+useStrict(true);
 
 class Store {
   @observable todos = todos;
