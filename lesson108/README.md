@@ -215,7 +215,214 @@ class OrderLine {
 也很简单，直接注解在组件上即可，需要注意的是，如果使用高阶组件或者要组合其他修饰器时， `@observer` 要写在最深处。
 对于写成函数形式的无状态组件(stateless functional component)，也可以使用 `observer` 方法来包装。
 
+```javascript
+import { observer } from 'mobx-react';
+
+// ES6 用法
+// 如果有其他高阶组件或者修饰器需要写在 @observer 之前
+@someHOC
+@someDecorator
+@observer
+class Hello1 extends React.Component {
+  render() {
+    return <h1>hello, {this.props.store.name}</h1>;
+  }
+}
+
+// ES5 用法
+const Hello2 = observer(({ store }) => <h1>hello, {store.name}</h1>);
+```
+
+4. `@action`
+
+`@action` 接收一个函数并返回具有同样签名的函数，当使用严格模式时所有 `observable` 对象的修改必须在 `action` 内部执行，否则 MobX 
+将抛出异常。可能初看上去 `@action` 没什么大的作用，但是 `action` 提供的另外一个 API 却是很使用的，即 `@action.bound` 它可以自动
+为方法绑定正确的 `this` 保证在异步或者组件内部调用时工作正常。同时 `action` 可以和 `transaction` 合并使用，在一组 `action` 完成
+后通知计算和反应，从而减少不必要的渲染以及优化性能，在个功能会在进阶使用中做简单介绍。
+
+```javascript
+class Ticker {
+    @observable this.tick = 0;
+
+    @action.bound
+    increment() {
+        this.tick++; // 'this' 永远都是正确的
+    }
+}
+
+const ticker = new Ticker();
+setInterval(ticker.increment, 1000);
+```
+
 ## 代码解析
+
+介绍完常用 API 后，我们来看一下使用 MobX 改写的 Todo List v2.0 又会是怎样的。
+
+首选还是配置环境，我们引入了 `mobx` 和 `mobx-react` 相关的库用于开发。同时我们引入了 `babel-plugin-transform-decorators-legacy` 
+库使得 babel 的编译器能正常编译修饰器，并在 `.babelrc` 内补充了相关配置。
+
+```json
+// .babelrc
+{
+  "presets": [
+    "es2015",
+    "react",
+    "stage-0"
+  ],
+  "plugins": [
+    "transform-decorators-legacy"
+  ]
+}
+```
+
+接着我们新增了 `tsconfig.json` 文件，使得 VSCode 支持修饰器的使用(主要是新增 `experimentalDecorators` 的配置)。
+
+```json
+// tsconfig.json
+{
+  "include": [
+    "src/**/*"
+  ],
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowJs": true
+  }
+}
+```
+
+相较于 lesson107 中的内容，我们去掉了 dispatcher 的结构，同时将 action 也放置在了 store 内部，于是文件夹的层级结构就仅剩下了 
+components 、 constants 和 stores 。
+
+```bash
+.
+├── res
+│   └── style
+├── src
+│   ├── components
+│   ├── constants
+│   ├── stores
+│   └── index.jsx
+├── .babelrc
+├── .eslintrc
+├── index.html
+├── package.json
+├── tsconfig.json
+└── webpack.config.js
+```
+
+由于在 Flux 章节中，我们已经将组件内部的业务逻辑抽离，所以 components 内的内容基本上可以完全复用，我们需要做的就是改写 store 和将 
+store 注入组件，以及将组件转化成响应式组件。
+
+1. 改写 store
+
+回顾 Flux 章节中的 store 主要用来管理和存储数据，对 action 的相应则是通过对在 dispatcher 上注册的回调。而 MobX 中的 store 则更像
+一个传统意义上的领域模型，既保存了业务中需要使用的数据，也包含对数据进行修改的方法。
+
+```javascript
+// ./src/stores/TodoStore.js
+import { observable, action, useStrict } from 'mobx';
+
+// 启用严格模式
+useStrict(true);
+
+// 构建 Store 类
+class Store {
+  @observable todos = todos;
+
+  /* ... */
+
+  @action
+  logout() {
+    this.doer = null;
+    this.errMsg = null;
+  }
+
+  /* ... */
+
+  @action.bound
+  deleteTodo(tid) {
+    this.todos = this.todos.filter(x => x.tid !== tid);
+  }
+}
+
+// 导出 store 实例
+export default new Store();
+```
+
+在上面的 `class Store` 内，我们首选定义了需要被观察的对象，接着便是定义业务相关的 action 。可以看到对 `logout` 方法我们并没有使用 
+`.bound` 绑定 `this` ，而对 `deleteTodo` 方法我们主动绑定了 `this` 这主要跟两个方法的使用环境有关。`logout` 方法的调用在 `DoerInfo` 
+组件的 `handleLogout` 方法内，该组件作为**容器组件**直接接触 `store` ，虽然写在 `setState` 的回调内，但因为使用了箭头函数因此可以正确的获得 `this` 。反观 `deleteTodo` 方法的调用在 `TodoView` 内部，其作为**展示组件**，是无需知道 `store` 存在的，所以需要为方法指明 `this` 。
+
+```javascript
+// ./src/components/DoerInfo.jsx
+handleLogout(e) {
+  e.preventDefault();
+  this.setState({ name: '', pswd: '' }, () => {
+    this.props.store.logout();
+  });
+  // 不用箭头函数又需要正确绑定 this 这时要拿到的 this 实际上是注入的 store
+  // this.setState({ name: '', pswd: '' }, this.props.store.logout.bind(this.props.store));
+}
+
+// ./src/components/TodoView.jsx
+export default function TodoView({ todo, markTodo, deleteTodo }) {
+  /* ... */
+  return (
+    <div className="todo-view">
+      {/* ... */}
+      <span><button
+        // view 层的交互直接触发出入的 store 内的 action
+        onClick={() => { deleteTodo(tid); }}
+      >x</button></span>
+    </div>
+  );
+}
+```
+
+2. 注入 store
+
+在 Flux 的章节，`store` 的注入，都是通过 `import` 注入组件，然后使用 `store` 暴露的方法获得数据。在 MobX 中 `store` 作为 `props` 
+传递给组件，组件同时获得 `store` 的所有属性和方法。
+
+```javascript
+// ./src/components/TodoApp.jsx
+import store from '../stores/TodoStore';
+
+export default function () {
+  return (
+    <div>
+      <h1>Todo List</h1>
+      <DoerInfo store={store} />
+      <AddTodo store={store} />
+      <hr />
+      <TodoList store={store} />
+    </div>
+  );
+}
+```
+
+3. 转化组件
+
+这个过程很简单，在需要渲染 `observable` 数据的 `class` 组件前加上 `@observer` 或对无状态组件使用 `observer` 方法。
+
+```javascript
+// ./src/components/DoerInfo.jsx
+import { observer } from 'mobx-react';
+@observer
+export default class DoerInfo extends React.Component {
+  /* ... */
+}
+
+// ./src/components/TodoList.jsx
+function TodoList({ store }) {
+  /* ... */
+}
+export default observer(TodoList);
+```
+
+好了，现在我们 `npm install` 然后 `npm run start` 等待编译完成后浏览器将自动打开，即可看到我们用 MobX 改写的 Todo List v2.0 。
+相较之前 Flux 版的 Todo List v2.0 ，这个版本 App 的代码得到了一定的简化(去掉了组件内部事件监听和解绑的部分，省略了 dispatch 的过程)，
+同时也保证了清晰的业务和展示功能的分离。
 
 ## MobX 进阶使用
 
