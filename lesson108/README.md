@@ -211,7 +211,7 @@ class OrderLine {
 3. `@observer`
 
 之前我们一直提到响应式，前面的 `@computed` 可以创建一个响应式的熟悉，而这里的 `@observer` 则是用来将 React 组件转变成响应式组件。 
-`observer` 并不包含在 MobX 的官方库内(最开始提到了 MobX 跟 React 并无强关联)，而是由 `mobx-react` 库提供。 `@observer` 的用法
+`observer` 并不包含在 MobX 的官方库内(最开始提到了 MobX 跟 React 并无强关联)，而是由 `mobx-react` 库提供。 `@observer` 的用法
 也很简单，直接注解在组件上即可，需要注意的是，如果使用高阶组件或者要组合其他修饰器时， `@observer` 要写在最深处。
 对于写成函数形式的无状态组件(stateless functional component)，也可以使用 `observer` 方法来包装。
 
@@ -237,7 +237,7 @@ const Hello2 = observer(({ store }) => <h1>hello, {store.name}</h1>);
 
 `@action` 接收一个函数并返回具有同样签名的函数，当使用严格模式时所有 `observable` 对象的修改必须在 `action` 内部执行，否则 MobX 
 将抛出异常。可能初看上去 `@action` 没什么大的作用，但是 `action` 提供的另外一个 API 却是很使用的，即 `@action.bound` 它可以自动
-为方法绑定正确的 `this` 保证在异步或者组件内部调用时工作正常。同时 `action` 可以和 `transaction` 合并使用，在一组 `action` 完成
+为方法绑定正确的 `this` 保证在异步或者组件内部调用时工作正常。同时 `action` 可以和 `transaction` 合并使用，在一组 `action` 完成
 后通知计算和反应，从而减少不必要的渲染以及优化性能，在个功能会在进阶使用中做简单介绍。
 
 ```javascript
