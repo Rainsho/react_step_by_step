@@ -155,7 +155,7 @@ MobX 官方推荐修饰器的用法，对要观察的类，直接添加 `@observ
 `@observable` 用来创建可被观察的对象，通常用在实例字段上。该字段可以是 JS 的基本数据类型也可以是复杂的对象 (包括普通对象、类实例和数组等) 。
 当被观察的值是对象时， MobX 实际上会克隆该对象，并把其所有属性都转化成可观察的。这里值得注意的是**对象上只有初始化时便存在的属性会转换成可观察的**，
 换言之，动态添加的属性是不会被观察的。(考虑到 JS 的弱语言性质，动态添加的属性依旧可以在 view 层进行引用，虽然对其的修改不会被观察到，但是当组件
-在其原因下重新 `render` 时，所做的修改依旧可以体现在 view 层面。这有点类似 React 中直接对 state 进行赋值的***反模式***)。
+在其原因下重新 `render` 时，所做的修改依旧可以体现在 view 层面。这有点类似 React 中直接对 state 进行赋值的 ***反模式*** )。
 
 ```javascript
 class Store {
@@ -183,6 +183,38 @@ store.obj.b = 5; // change 被观察 App 响应重新渲染
 
 2. `@computed`
 
+`@computed` 用来创建计算值，可以与 excel 表格中的公式类比。例如如下的 excel 表格，在 C1 内输入 `=A1+B1` 将显示为 3 同时每次当 A1 或者 B1 
+改变后，C1 均会根据 A1 和 B1 的新值重新计算。在 MobX 中， A1 或 B1 即可为上面的被观察对象，而 C1 以一个纯函数的形式，每次根据 A1 和 
+B1 的值重新计算。
+
+||ColA|ColB|ColC|
+|:-|-:|-:|-:|
+|Row1|1|2|=A1+B1|
+
+`@computed` 需要引用被观察的对象，这样其才能是响应式的(即对应的 `@observable` 对象的改变，会引起引用 `@computed` 值的组件的重新渲染)。 
+MobX 对计算值做了很好的优化，如果前一个计算中使用的数据没有更改，计算属性将不会重新运行，如果计算值未被使用，也不会重新运行。 
+`@computed` 直接注解在 `setter` 上即可。
+
+```javascript
+import { observable, computed } from "mobx";
+
+class OrderLine {
+    @observable price = 0;
+    @observable amount = 1;
+
+    @computed get total() {
+        return this.price * this.amount;
+    }
+}
+```
+
+3. `@observer`
+
+之前我们一直提到响应式，前面的 `@computed` 可以创建一个响应式的熟悉，而这里的 `@observer` 则是用来将 React 组件转变成响应式组件。 
+`observer` 并不包含在 MobX 的官方库内(最开始提到了 MobX 跟 React 并无强关联)，而是由 `mobx-react` 库提供。 `@observer` 的用法
+也很简单，直接注解在组件上即可，需要注意的是，如果使用高阶组件或者要组合其他修饰器时， `@observer` 要写在最深处。
+对于写成函数形式的无状态组件(stateless functional component)，也可以使用 `observer` 方法来包装。
+
 ## 代码解析
 
 ## MobX 进阶使用
@@ -191,5 +223,6 @@ store.obj.b = 5; // change 被观察 App 响应重新渲染
 
 1. [MobX 中文文档](http://cn.mobx.js.org/)
 1. [阮一峰: ES6入门#方法的修饰](http://es6.ruanyifeng.com/#docs/decorator#方法的修饰)
+1. [JavaScript 中的"纯函数"](http://web.jobbole.com/86136/)
 
 下一章: [Redux](../lesson109/README.md)
