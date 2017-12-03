@@ -1,8 +1,12 @@
 var path = require('path');
 var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
+const entry = process.env.ADV
+  ? `src/advanced/${process.env.ADV}.jsx`
+  : 'src/index.jsx';
+
 module.exports = {
-  entry: path.resolve(__dirname, 'src/index.jsx'),
+  entry: path.resolve(__dirname, entry),
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -16,6 +20,7 @@ module.exports = {
         test: /\.jsx?$/,
         loaders: 'eslint-loader',
         include: path.resolve(__dirname, 'src'),
+        exclude: path.resolve(__dirname, 'src/advanced'),
       },
       {
         test: /\.jsx?$/,

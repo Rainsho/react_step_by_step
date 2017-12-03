@@ -426,6 +426,142 @@ export default observer(TodoList);
 
 ## MobX 进阶使用
 
+MobX 除了上面介绍的 API 还有大量实用工具和内部函数用来解决遇到的问题或者优化代码，这里简要介绍 
+`inject` 、 `autorun` 、 `runInAction` 和 `transaction` 四个，当然套用官方的话，掌握了上面常用 API 中的四个就够了。
+
+> 理解了 `observable` 、 `computed` 、 `reactions` 和 `actions` 的话，说明对于 Mobx 已经足够精通了。
+
+1. `inject`
+
+回看我们在 `TodoApp` 中的代码，我们不难发现所有的**容器组件**，都是通过 `<Component store={store} />` 的形式注入的 `store` 。
+如果我们要在多处引用同一个组件，就需要多次的注入 `store` 很不方便。鉴于此， MobX 提供了另外一种 `store` 的注入方法，即通过 `Provider` 的
+形式注入。我们在 App 的最外层包裹 `Provider` ，然后把需要注入的 `store` 传递给 `Provider` ，这样就可以通过 `inject` 的形式可借由 
+React 的 `context` 机制，把任意的 `props` 注入到组件内部。
+
+```javascript
+// ./src/advanced/01inject.jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { observable } from 'mobx';
+import { observer, inject, Provider } from 'mobx-react';
+
+class Store {
+  @observable name = 'Rainsho';
+}
+
+const store = new Store();
+
+// 非严格模式下将 store 暴露在 window 下
+// 加载完页面后可直接在浏览器的 Console 下赋值 store.name = 'Hulk';
+window.store = store;
+
+// inject 的第一种使用方式入参为 string
+// 相当于将 Provider 的 props.store 作为要注入组件的 props.store 传入
+@inject('store')
+@observer
+class Hello1 extends React.Component {
+  render() {
+    return <h1>hello, {this.props.store.name}</h1>;
+  }
+}
+
+// inject 的第二种使用方式入参为 function
+// function 的入参为 Provider 的所有 props
+// function 返回的对象作为 props 传入给需要注入的组件
+@inject(stores => ({
+  name: stores.store.name,
+}))
+@observer
+class Hello2 extends React.Component {
+  render() {
+    return <h1>hello, {this.props.name}</h1>;
+  }
+}
+
+// 注意 Provider 只接受一个唯一的 child
+// 如果有多个 children 则需要在外层再做一次包裹
+ReactDOM.render(
+  <Provider store={store}>
+    <div>
+      <Hello1 />
+      <Hello2 />
+    </div>
+  </Provider>,
+  document.getElementById('root'),
+);
+```
+
+使用 `npm run adv01` 启动 demo ，在浏览器 Console 内输入 `store.name = 'Hulk';` 即可看到页面变化。
+
+2. `autorun`
+
+`autorun` 用来创建一个响应式函数，与 `computed` 的区别在于，他不需要有观察者，因此可以用来打印日志或者更新 UI 等。
+`autorun` 接受一个方法作为参数，同时返回一个 `disposer` 方法用来销毁。
+
+```javascript
+var numbers = observable([1,2,3]);
+var sum = computed(() => numbers.reduce((a, b) => a + b, 0));
+
+var disposer = autorun(() => console.log(sum.get())); // 输出 6
+numbers.push(4); // 输出 10
+
+disposer(); // 清理当前 autorun
+numbers.push(5); // 不会再输出任何值 sum 也不会再重新计算
+```
+
+为了更好的对比其与 `computed` 的区别，可以参照 [02autorun.jsx](./src/advanced/02autorun.jsx) 内的代码。
+我们使用 `npm run adv02` 启动 demo ，打开浏览器 Console 。
+
+```javascript
+// ./src/advanced/02autorun.jsx
+// 全局变量用来计数
+let count = 0; 
+class Store {
+  @observable numbers = [1, 2, 3];
+  @observable showSum = true;
+  @computed get sum() {
+    count++;
+    return this.numbers.reduce((a, b) => a + b, 0);
+  }
+}
+const store = new Store();
+// 将 store 暴露在 window 下
+window.store = store;
+// 创建 autorun 并将 disposer 方法暴露在 window 下
+window.disposer = autorun(() => console.log(`numbers is ${store.numbers} count is ${count}`));
+
+/**** 以下为浏览器 Console 内的操作 ****/
+
+// 页面渲染 1 2 3 sum is 6
+// Console 内 autorun 的第一次输出 'numbers is 1,2,3 count is 0'
+// ps: 此时的 count 实际为 1 因为 render 中有调用 sum 的 get 方法
+
+store.numbers.push(4);
+// 页面渲染 1 2 3 4 sum is 10
+// Console 输出 'numbers is 1,2,3,4 count is 1'
+// ps: 此时的 count 实际为 2 因为 reRender 时再次调用 sum 的 get 方法
+
+store.showSum = false;
+// 页面渲染 1 2 3 4
+
+store.numbers.push(5);
+// 页面渲染 1 2 3 4 5
+// Console 输出 'numbers is 1,2,3,4,5 count is 2'
+// ps: 此时的 count 为 2 因为 sum 不再被引用 mobx 不再对其进行重新计算
+
+store.numbers.push(6);
+// 页面渲染 1 2 3 4 5 6
+// Console 输出 'numbers is 1,2,3,4,5,6 count is 2'
+
+disposer();
+store.numbers.push(7);
+// 页面渲染 1 2 3 4 5 6 7
+```
+
+3. `runInAction`
+
+4. `transaction`
+
 ## 扩展阅读
 
 1. [MobX 中文文档](http://cn.mobx.js.org/)

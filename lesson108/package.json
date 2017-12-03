@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "adv01": "ADV=01inject webpack-dev-server",
+    "adv02": "ADV=02autorun webpack-dev-server"
   },
   "author": "Rainsho",
   "license": "ISC",
