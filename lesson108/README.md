@@ -560,12 +560,145 @@ store.numbers.push(7);
 
 3. `runInAction`
 
+前面讲的 `action` 用来注解一个会修改 `observable` 对象的方法。但是 `action` 修饰器的作用范围只包含当前运行的函数，换言之被丢进
+事件循环的部分，并不在 `action` 的影响范围内。比如你在方法内使用了定时器、 promise 的 `then` 或 `async` 语句，并且尝试在回调函数
+中修改某些状态，这部分回调代码也是需要包裹在 `action` 内的，否则在严格模式下就将抛出错误。
+
+```javascript
+mobx.useStrict(true); // 不允许在动作之外进行状态修改
+
+class Store {
+  @observable state = 'waiting';
+
+  @action.bound
+  asyncAction1() {
+    this.state = 'pending';
+    fetchData()
+      .then(() => {
+        this.state = 'done';
+      })
+      .catch(() => {
+        this.state = 'error';
+      });
+  }
+}
+```
+
+例如上面的示例将会抛出异常，因为 `fetchData` 的 promise 的回调函数并不是 `asyncAction1` 动作的一部分， `action` 只会作用于当前栈。
+(关于事件循环和调用栈的问题，可以参看扩展阅读[4]) 。
+
+针对上面的问题，最简单的修复就是将 promise 的回调也包装成 `action` 。
+
+```javascript
+@action.bound
+handleDone() {
+  this.state = 'done';
+}
+
+@action.bound
+handleError() {
+  this.state = 'error';
+}
+
+@action.bound
+asyncAction2() {
+  fetchData()
+    .then(this.handleDone)
+    .catch(this.handleError);
+}
+```
+
+这样写也还算比较清楚，但当异步流程复杂后可能会略显啰嗦。另外一种修改方式就是使用 `runInAction` 工具函数，这样可以避免到处写 `action` ，
+而是仅在需要修改 `observable` 时进行修改。 `runInAction` 接受一个方法作为入参，事实上 `runInAction(f)` 可以看成 
+`action(f)()` 的语法糖。
+
+```javascript
+@action.bound
+asyncAction3() {
+  fetchData()
+    .then(() => {
+      // do something
+      runInAction(() => {
+        this.state = 'done';
+      });
+    })
+    .catch(() => {
+      // do something
+      runInAction(() => {
+        this.state = 'error';
+      });
+    });
+}
+```
+
 4. `transaction`
+
+最后聊一聊 `transaction` ，这是个比较底层的 API ，在绝大多数场景下使用 `action` 或 `runInAction` 即可。 `transaction` 的
+主要作用是其可以嵌套包裹多个方法，且仅在最外层 `transaction` 执行完后才会通知观察者做出相应。值得一提的(~~我之前不知道的~~)是 
+`action` 会自动将方法包裹在 `transaction` 里面，所以这个示例 demo 就不使用严格模式了。另外，由于 React 的自身也会维护一组
+事务(用来合并当前调用栈内的 `setState` )，所以要看到 `transaction` 的作用，我们还需要将 `store` 内的方法也写进 React 代理事件
+的回调内。
+
+```javascript
+class Store {
+  @observable count = 0;
+
+  // 不使用 action 注解的修改 observable 对象的方法
+  withoutTransaction() {
+    this.count++;
+    this.count++;
+    this.count++;
+  }
+
+  // 使用 transaction 包裹修改 observable 对象的方法
+  withTransaction() {
+    transaction(() => {
+      transaction(() => {
+        this.count++;
+        this.count++;
+      });
+      this.count++;
+    })
+  }
+}
+
+/* ... */
+
+render() {
+  console.log('render', ++this.times, 'times');
+  return (
+    <div>
+      <h1>{`count is ${this.store.count}`}</h1>
+      <button onClick={() => {
+        new Promise(res => res())
+          .then(() => this.store.withoutTransaction());  // 在回调内执行 store 内的方法
+      }}>withoutTransaction</button>
+      <br />
+      <button onClick={() => {
+        new Promise(res => res())
+          .then(() => this.store.withTransaction());    // 在回调内执行 store 内的方法
+      }}>withTransaction</button>
+    </div>
+  );
+}
+```
+
+使用 `npm run adv04` 启动 demo ，打开浏览器 Console ，当点击 withoutTransaction 按钮时，我们可以看到每次修改 `observable` 对象 
+MobX 都会去通知组件进行渲染，因此组件将 `render` 三次。而点击 withTransaction 按钮时，我们可以看到 MobX 会等三次修改都完成后才去通知
+组件进行渲染，因此组件只 `rendre` 了一次。
+
+## 小结
+
+到此 MobX 的内容就算简单介绍完了。对比于 Redux ，个人感觉 MobX 更偏重面向对象的思想，其 store 就是既包含数据模型，也包含业务功能的领域模型。
+而 Redux 则更偏重于函数式编程，通过纯函数去修改 state 。当面对一个不太复杂的项目时， MobX 的引入成本不大，核心 API 也较少，也没有过于复杂的
+抽象概念。在引入后基本上无须额外维护 state ，也可以很容易的将业务逻辑抽离到 store 内部，让组件只需关心 view 层的展示，最大程度的发货 React 
+的优势。
 
 ## 扩展阅读
 
 1. [MobX 中文文档](http://cn.mobx.js.org/)
 1. [阮一峰: ES6入门#方法的修饰](http://es6.ruanyifeng.com/#docs/decorator#方法的修饰)
 1. [JavaScript 中的"纯函数"](http://web.jobbole.com/86136/)
+1. [JavaScript 运行机制详解：再谈Event Loop](http://www.ruanyifeng.com/blog/2014/10/event-loop.html)
 
 下一章: [Redux](../lesson109/README.md)

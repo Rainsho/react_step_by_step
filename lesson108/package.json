@@ -8,7 +8,9 @@
     "build": "webpack",
     "start": "webpack-dev-server",
     "adv01": "ADV=01inject webpack-dev-server",
-    "adv02": "ADV=02autorun webpack-dev-server"
+    "adv02": "ADV=02autorun webpack-dev-server",
+    "adv03": "ADV=03runInAction webpack-dev-server",
+    "adv04": "ADV=04transaction webpack-dev-server"
   },
   "author": "Rainsho",
   "license": "ISC",
