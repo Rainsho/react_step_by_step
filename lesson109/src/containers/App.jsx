@@ -8,9 +8,18 @@ import * as TodoActions from '../actions/TodoActionCreator';
 
 const App = ({ data, actions }) => (
   <div>
-    <DoerInfo data={data} login={actions.createLoginAction} register={actions.createRegisterAction} logout={actions.createLogoutAction} />
+    <DoerInfo
+      data={data}
+      login={actions.createLoginAction}
+      register={actions.createRegisterAction}
+      logout={actions.createLogoutAction}
+    />
     <AddTodo addTodo={actions.createAddTodoAction} />
-    <TodoList todos={data.todos} deleteTodo={actions.createDeleteTodoAction} mark={actions.createMarkTodoAction} />
+    <TodoList
+      todos={data.todos}
+      deleteTodo={actions.createDeleteTodoAction}
+      mark={actions.createMarkTodoAction}
+    />
   </div>
 );
 
