@@ -66,14 +66,53 @@ Reducer接收连个参数，初始化state和action,根据action type进行对�
         }
      ```
   
-   Reducer负责生成State，整个应用只有一个State，对大型应用来说必然及其庞大，Redux为此提供了一个combineReducers方法，用于拆分Reducer，从而可以更加细粒度的控制组件State，从而更好的管理组件状态。详细使用方式可以参考simpleDemo下的index.js文件中的用法。
+ Reducer负责生成State，整个应用只有一个State，对大型应用来说必然及其庞大，Redux为此提供了一个combineReducers方法，用于拆分Reducer，从而可以更加细粒度的控制组件State，从而更好的管理组件状态。详细使用方式可以参考simpleDemo下的index.js文件中的用法。
    
 4. middleware
+中间件就是在要处理的流程中（前或后）做增强功能，类似于Java的面向切面的编程。在redux中中间件就是一个函数，对store.dispatch方法进行了改造，在发出 Action 和执行 Reducer 这两步之间，添加了其他功能，如下面代码中使用applayMiddleware函数在创建store的时候织入日志中间件。
 
+  ```
+  //定义日志中间件logger
+  const logger = createLogger();
+
+  //使用createStore()创建Store，应用logger中间件
+  let store = createStore(counter,initState,
+  applyMiddleware(logger));
+  ```
 5. React-Redux
-    Redux本身和React没有必然联系，React是一个View层解决方案，Redux是数据层方案，如果要在项目中将Redux和React相结合，需要一个新的第三方框架React—Redux。
-     - Provider
-     - Connect
+    Redux本身和React没有必然联系，React是一个View层解决方案，Redux是数据层方案，如果要在项目中将Redux和React相结合，需要一个新的第三方框架React—Redux，React－Redux不作为本篇的主要功能介绍，这里只简单的介绍几个api，具体的使用方式可以参考改节课程demo中的用法。
+     - Provider;  Provider 用于让容器组件拿到state，如下面代码，TodoApp组件内的所有子组建都可以拿到state。
+        ```
+        const store = configureStore();
+
+        ReactDOM.render(
+          <Provider store={store}>
+            <TodoApp />
+          </Provider>,
+          document.getElementById('root'),
+        );
+        ```
+     - Connect； 用于从UI组件生成容器组件，connect的意思就是连接，将这两种组件链接起来，如下代码，connect接受两个参数，一个是mapStateToProps，将UI组件的state映射入props，一个是mapDispatchToProps，用于将UI组件的行为映射为props。
+        ```
+        const mapStateToProps = state => ({
+          data: {
+            todos: state.TodoReducer.todos,
+            doers: state.TodoReducer.doers,
+            doer: state.TodoReducer.doer,
+            errMsg: state.TodoReducer.errMsg,
+          },
+        });
+
+        const mapDispatchToProps = dispatch => ({
+          actions: bindActionCreators(TodoActions, dispatch),
+        });
+
+        export default connect(
+          mapStateToProps,
+          mapDispatchToProps,
+        )(App);
+        ```
+
 
 ## 代码解析
     这里只对simpleDemo下的简单代码进行解析，来阐述Redux中概念以及api的使用，笔者同样使用Redux+React-Redux改造了Lesson106中的Todo App，供读者参考学习。
