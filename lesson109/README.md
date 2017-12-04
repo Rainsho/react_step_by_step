@@ -71,7 +71,7 @@ Reducer接收连个参数，初始化state和action,根据action type进行对�
 4. middleware
 
 5. React-Redux
-    Redux本身和React没有必然联系，React是一个View层解决方案，Redux是数据层方案，如果要在项目中讲Redux和React相结合，需要一个新的第三方框架React—Redux。
+    Redux本身和React没有必然联系，React是一个View层解决方案，Redux是数据层方案，如果要在项目中将Redux和React相结合，需要一个新的第三方框架React—Redux。
      - Provider
      - Connect
 
