@@ -159,7 +159,7 @@ MobX 官方推荐修饰器的用法，对要观察的类，直接添加 `@observ
 
 ```javascript
 class Store {
-  @@observable obj = { a: 1};
+  @observable obj = { a: 1};
 }
 
 const store = new Store();
@@ -193,7 +193,7 @@ B1 的值重新计算。
 
 `@computed` 需要引用被观察的对象，这样其才能是响应式的(即对应的 `@observable` 对象的改变，会引起引用 `@computed` 值的组件的重新渲染)。 
 MobX 对计算值做了很好的优化，如果前一个计算中使用的数据没有更改，计算属性将不会重新运行，如果计算值未被使用，也不会重新运行。 
-`@computed` 直接注解在 `setter` 上即可。
+`@computed` 直接注解在 `getter` 上即可。
 
 ```javascript
 import { observable, computed } from "mobx";
