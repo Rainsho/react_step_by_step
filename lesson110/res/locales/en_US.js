@@ -6,4 +6,9 @@ export default {
   ...en,
 
   'COMMON.HELLO': 'Hello',
+  'COMMON.NAME': 'Name',
+  'COMMON.PSWD': 'Password',
+  'COMMON.LOGIN': 'Regist/Login',
+  'COMMON.WELCOME': 'Welcome',
+  'COMMON.LOGOUT': 'Logout',
 };

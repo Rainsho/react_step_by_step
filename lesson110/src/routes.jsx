@@ -21,7 +21,7 @@ const B = () => (
   </div>
 );
 
-export default (
+const routes = (
   <Route path="/" component={TodoIntl}>
     <Route component={App}>
       <IndexRoute component={A} />
@@ -30,3 +30,5 @@ export default (
     </Route>
   </Route>
 );
+
+export default routes;
