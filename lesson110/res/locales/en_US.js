@@ -11,4 +11,5 @@ export default {
   'COMMON.LOGIN': 'Regist/Login',
   'COMMON.WELCOME': 'Welcome',
   'COMMON.LOGOUT': 'Logout',
+  'COMMON.ADD': 'Add',
 };

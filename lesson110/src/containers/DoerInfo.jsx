@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 
 import { login, logout } from '../actions';
+import { anony } from '../constants';
 
 class DoerInfo extends React.Component {
   constructor(props) {
@@ -20,9 +21,11 @@ class DoerInfo extends React.Component {
 
   render() {
     const { doer, logout, intl } = this.props;
+
+    // for short
     const fmt = id => intl.formatMessage({ id });
 
-    if (doer.uid !== 0) {
+    if (doer.uid !== anony.uid) {
       return (
         <div className="doer-info-welcome">
           <span>{`${fmt('COMMON.WELCOME')}: ${doer.name}`}</span>

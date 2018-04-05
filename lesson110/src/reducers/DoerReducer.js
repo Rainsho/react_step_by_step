@@ -1,11 +1,10 @@
 import { combineReducers } from 'redux';
 import { v4 } from 'uuid';
 import { LOGIN, LOGOUT } from '../constants';
-import { doers } from '../constants';
+import { doers, anony } from '../constants';
 import { formatMessage } from '../containers/TodoIntl';
 
 const doersDB = { ...doers };
-const anony = doersDB[0];
 
 function newDoer(name, pswd) {
   return { name, pswd, uid: v4() };

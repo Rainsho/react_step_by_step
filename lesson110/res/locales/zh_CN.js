@@ -11,4 +11,5 @@ export default {
   'COMMON.LOGIN': '登陆/注册',
   'COMMON.WELCOME': '欢迎',
   'COMMON.LOGOUT': '注销',
+  'COMMON.ADD': '新增',
 };
