@@ -39,7 +39,7 @@ class TodoIntl extends React.Component {
     ));
 
     return (
-      <IntlProvider locale={locale} messages={message} ref={el => (this.el = el)}>
+      <IntlProvider locale={locale} messages={message} ref={(el) => { this.el = el; }}>
         <div>
           <div className="intl-control">{radios}</div>
           {children}
@@ -54,7 +54,7 @@ export default connect(store => ({ locale: store.todoIntl }), { changeLocale })(
 export function formatMessage(id, defaultMessage, options) {
   if (!intl || !intl.formatMessage) {
     // throw new Error('INTL NOT FOUND');
-    return;
+    return '';
   }
 
   return intl.formatMessage({ id, defaultMessage }, options);

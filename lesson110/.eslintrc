@@ -5,7 +5,9 @@
     "react/prop-types": "off",
     "jsx-a11y/href-no-hash": "off",
     "jsx-a11y/label-has-for": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "comma-dangle": "off",
+    "no-shadow": "off"
   },
   "env": {
     "browser": true

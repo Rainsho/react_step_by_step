@@ -7,7 +7,7 @@ const AddTodo = ({ intl, addTodo }) => {
     <div>
       <input
         type="text"
-        ref={el => {
+        ref={(el) => {
           $el = el;
         }}
       />

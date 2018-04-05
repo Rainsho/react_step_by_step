@@ -33,10 +33,10 @@ class DoerStatistic extends React.Component {
       <div>
         <h2>{doer.name}</h2>
         <div className="doer-statistic">
-          <span style={{ width: undone / allTodos.length * 100 + '%' }}>{`${fmt(
+          <span style={{ width: `${(undone / allTodos.length) * 100}%` }}>{`${fmt(
             'COMMON.UNDONE'
           )}: ${undone}`}</span>
-          <span style={{ width: done / allTodos.length * 100 + '%' }}>{`${fmt(
+          <span style={{ width: `${(done / allTodos.length) * 100}%` }}>{`${fmt(
             'COMMON.DONE'
           )}: ${done}`}</span>
         </div>
