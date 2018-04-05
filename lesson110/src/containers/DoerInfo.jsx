@@ -20,7 +20,8 @@ class DoerInfo extends React.Component {
   }
 
   render() {
-    const { doer, logout, intl } = this.props;
+    const { doer: { doers, current }, logout, intl } = this.props;
+    const doer = doers[current];
 
     // for short
     const fmt = id => intl.formatMessage({ id });
@@ -29,7 +30,7 @@ class DoerInfo extends React.Component {
       return (
         <div className="doer-info-welcome">
           <span>{`${fmt('COMMON.WELCOME')}: ${doer.name}`}</span>
-          <a href="#" onClick={logout}>
+          <a href="#" onClick={() => this.setState({ pswd: '' }, logout)}>
             {fmt('COMMON.LOGOUT')}
           </a>
         </div>

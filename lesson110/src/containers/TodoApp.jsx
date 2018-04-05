@@ -6,9 +6,8 @@ import DoerInfo from './DoerInfo';
 
 const App = ({ intl, children }) => (
   <div>
-    <h1>{intl.formatMessage({ id: 'COMMON.HELLO' })}</h1>
+    <h1>{intl.formatMessage({ id: 'COMMON.APPNAME' })}</h1>
     <DoerInfo />
-    <hr />
     {children}
     <footer>
       <Link to="home">{intl.formatMessage({ id: 'COMMON.HELLO' })}</Link>
