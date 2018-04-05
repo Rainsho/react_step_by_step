@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { FormattedRelative } from 'react-intl';
+import { Router, hashHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 
 import store from './store';
-import TodoIntl from './containers/TodoIntl';
+import routes from './routes';
+
+const history = syncHistoryWithStore(hashHistory, store);
 
 const App = () => (
   <Provider store={store}>
-    <TodoIntl>
-      <FormattedRelative value={Date.now() - Math.random() * 1e10} />
-    </TodoIntl>
+    <Router history={history} routes={routes} />
   </Provider>
 );
 

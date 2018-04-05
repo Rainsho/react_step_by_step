@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@types/react-router": "3.0.15",
+    "@types/react-router-redux": "4.0.51",
     "babel-core": "6.26.0",
     "babel-eslint": "8.0.1",
     "babel-loader": "7.1.2",
