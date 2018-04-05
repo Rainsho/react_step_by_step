@@ -1,8 +1,9 @@
 import React from 'react';
-import { Route, IndexRedirect, Link } from 'react-router';
+import { Route, IndexRoute, Link } from 'react-router';
 import { FormattedRelative } from 'react-intl';
 
 import TodoIntl from './containers/TodoIntl';
+import App from './containers/TodoApp';
 
 const A = () => (
   <div>
@@ -22,8 +23,10 @@ const B = () => (
 
 export default (
   <Route path="/" component={TodoIntl}>
-    <IndexRedirect to="a" />
-    <Route path="a" component={A} />
-    <Route path="b" component={B} />
+    <Route component={App}>
+      <IndexRoute component={A} />
+      <Route path="a" component={A} />
+      <Route path="b" component={B} />
+    </Route>
   </Route>
 );

@@ -9,10 +9,10 @@ import routes from './routes';
 
 const history = syncHistoryWithStore(hashHistory, store);
 
-const App = () => (
+const Root = () => (
   <Provider store={store}>
     <Router history={history} routes={routes} />
   </Provider>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Root />, document.getElementById('root'));

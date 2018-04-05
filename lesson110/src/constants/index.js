@@ -1,1 +1,2 @@
-export const CHANGELOCALE = 'CHANGELOCALE';
+export * from './actionTypes';
+export * from './mockData';
