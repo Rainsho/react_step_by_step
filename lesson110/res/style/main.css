@@ -1,14 +1,19 @@
-.todo-title{
+#root {
+  max-width: 600px;
+}
+
+.todo-title {
   font-size: 16px;
   height: 24px;
   font-weight: bold;
 }
 
-.todo-view{
+.todo-view {
   height: 24px;
 }
 
-.todo-title span,.todo-view span{
+.todo-title span,
+.todo-view span {
   display: inline-block;
   border: 1px solid grey;
   text-align: center;
@@ -17,18 +22,38 @@
   overflow: hidden;
 }
 
-.todo-title span:nth-child(1),.todo-view span:nth-child(1){
+.todo-title span:nth-child(1),
+.todo-view span:nth-child(1) {
   width: 60px;
 }
 
-.todo-title span:nth-child(2),.todo-view span:nth-child(2){
+.todo-title span:nth-child(2),
+.todo-view span:nth-child(2) {
   width: 120px;
 }
 
-.todo-title span:nth-child(3),.todo-view span:nth-child(3){
+.todo-title span:nth-child(3),
+.todo-view span:nth-child(3) {
   width: 240px;
 }
 
-.todo-title span:nth-child(4),.todo-view span:nth-child(4){
+.todo-title span:nth-child(4),
+.todo-view span:nth-child(4) {
   width: 80px;
+}
+
+.doer-statistic {
+  width: 100%;
+  height: 30px;
+  overflow: hidden;
+}
+
+.doer-statistic span {
+  float: left;
+  background-color: #f44336;
+  text-align: center;
+}
+
+.doer-statistic span:nth-child(2) {
+  background-color: #009688;
 }

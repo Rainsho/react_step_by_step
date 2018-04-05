@@ -1,7 +1,6 @@
-import { omit, merge } from 'lodash';
+import { omit } from 'lodash';
 import { v4 } from 'uuid';
-import { ADD_TODO, MARK_TODO, DELETE_TODO } from '../constants';
-import { todos } from '../constants';
+import { todos, ADD_TODO, MARK_TODO, DELETE_TODO } from '../constants';
 
 function newTodo(uid, content) {
   return { uid, content, done: false, tid: v4() };

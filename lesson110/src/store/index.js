@@ -6,9 +6,8 @@ import { hashHistory } from 'react-router';
 
 import reducer from '../reducers';
 
-const store = createStore(
-  reducer,
-  applyMiddleware(reduxThunk, routerMiddleware(hashHistory), reduxLogger)
-);
+const middlewares = applyMiddleware(reduxThunk, routerMiddleware(hashHistory), reduxLogger);
+
+const store = createStore(reducer, middlewares);
 
 export default store;

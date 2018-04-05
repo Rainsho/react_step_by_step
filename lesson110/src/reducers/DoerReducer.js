@@ -1,15 +1,13 @@
-import { combineReducers } from 'redux';
 import { v4 } from 'uuid';
-import { LOGIN, LOGOUT } from '../constants';
-import { doers, anony } from '../constants';
+import { doers, anony, LOGIN, LOGOUT } from '../constants';
 import { formatMessage } from '../containers/TodoIntl';
 
 function newDoer(name, pswd) {
   return { name, pswd, uid: v4() };
 }
 
-function findDoer(doers, name) {
-  return Object.values(doers).find(x => x.name === name);
+function findDoer(doerObj, name) {
+  return Object.values(doerObj).find(x => x.name === name);
 }
 
 export function doerReducer(state = { doers, current: anony.uid }, action) {
@@ -22,8 +20,8 @@ export function doerReducer(state = { doers, current: anony.uid }, action) {
       // new doer
       if (!doer) {
         doer = newDoer(name, pswd);
-        const doers = Object.assign({}, state.doers, { [doer.uid]: doer });
-        return { doers, current: doer.uid };
+        const doerObj = Object.assign({}, state.doers, { [doer.uid]: doer });
+        return { doers: doerObj, current: doer.uid };
       }
 
       // pswd don't match

@@ -17,4 +17,6 @@ export default {
   'COMMON.USER': 'User',
   'COMMON.CONTENT': 'Content',
   'COMMON.OPERATE': 'Operate',
+  'COMMON.UNDONE': 'Undone',
+  'COMMON.HOME': 'HOME',
 };

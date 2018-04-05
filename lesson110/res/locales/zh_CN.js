@@ -17,4 +17,6 @@ export default {
   'COMMON.USER': '用户',
   'COMMON.CONTENT': '内容',
   'COMMON.OPERATE': '操作',
+  'COMMON.UNDONE': '未完成',
+  'COMMON.HOME': '主页',
 };

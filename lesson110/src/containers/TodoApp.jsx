@@ -10,7 +10,7 @@ const App = ({ intl, children }) => (
     <DoerInfo />
     {children}
     <footer>
-      <Link to="home">{intl.formatMessage({ id: 'COMMON.HELLO' })}</Link>
+      <Link to="/home">{intl.formatMessage({ id: 'COMMON.HOME' })}</Link>
     </footer>
   </div>
 );
