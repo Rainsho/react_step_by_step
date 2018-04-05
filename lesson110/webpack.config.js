@@ -8,15 +8,15 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/dist/',
   },
-  // devtool: 'eval-source-map',
+  devtool: 'eval-source-map',
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.jsx?$/,
-        loaders: 'eslint-loader',
-        include: path.resolve(__dirname, 'src'),
-      },
+      // {
+      //   enforce: 'pre',
+      //   test: /\.jsx?$/,
+      //   loaders: 'eslint-loader',
+      //   include: path.resolve(__dirname, 'src'),
+      // },
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',

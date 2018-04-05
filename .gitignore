@@ -4,3 +4,4 @@ node_modules
 !*/dist/.gitkeep
 lint-results.html
 package-lock.json
+.DS_Store
