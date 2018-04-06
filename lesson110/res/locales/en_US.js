@@ -19,4 +19,7 @@ export default {
   'COMMON.OPERATE': 'Operate',
   'COMMON.UNDONE': 'Undone',
   'COMMON.HOME': 'HOME',
+
+  'INFO.EMPTY': 'Where is your password?',
+  'INFO.NOTMATCH': 'Password do not match!',
 };

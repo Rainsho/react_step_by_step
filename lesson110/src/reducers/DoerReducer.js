@@ -40,10 +40,10 @@ export function uiReducer(state = null, action) {
   switch (action.type) {
     case LOGIN: {
       const { name, pswd } = action.payload;
-      if (!name || !pswd) return formatMessage('COMMON.HELLO');
+      if (!name || !pswd) return formatMessage('INFO.EMPTY');
       const doer = findDoer(name);
       if (!doer || doer.pswd === pswd) return null;
-      return formatMessage('COMMON.HELLO');
+      return formatMessage('INFO.NOTMATCH');
     }
     case LOGOUT:
       return null;

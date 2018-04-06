@@ -19,4 +19,7 @@ export default {
   'COMMON.OPERATE': '操作',
   'COMMON.UNDONE': '未完成',
   'COMMON.HOME': '主页',
+
+  'INFO.EMPTY': '用户名或密码为空',
+  'INFO.NOTMATCH': '用户名密码不匹配',
 };
