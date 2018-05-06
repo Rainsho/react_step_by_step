@@ -7,7 +7,8 @@
     "jsx-a11y/label-has-for": "off",
     "class-methods-use-this": "off",
     "comma-dangle": "off",
-    "no-shadow": "off"
+    "no-shadow": "off",
+    "no-console": "off"
   },
   "env": {
     "browser": true

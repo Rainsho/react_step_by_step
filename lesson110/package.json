@@ -9,11 +9,13 @@
     "start": "webpack-dev-server",
     "build:dll": "webpack --config webpack.config.dll.js",
     "build:app": "webpack --config webpack.config.app.js",
-    "build:v2": "npm run build:dll && npm run build:app"
+    "build:v2": "npm run build:dll && npm run build:app",
+    "start:v2": "webpack-dev-server --config webpack.config.app.js"
   },
   "author": "Rainsho",
   "license": "ISC",
   "dependencies": {
+    "babel-polyfill": "6.26.0",
     "lodash": "4.17.4",
     "react": "15.6.1",
     "react-dom": "15.6.1",
@@ -23,6 +25,7 @@
     "react-router-redux": "4.0.8",
     "redux": "3.7.2",
     "redux-logger": "3.0.6",
+    "redux-saga": "0.16.0",
     "redux-thunk": "2.2.0",
     "uuid": "3.1.0"
   },

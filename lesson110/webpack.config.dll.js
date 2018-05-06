@@ -14,6 +14,7 @@ var vendor = [
   'redux-logger',
   'redux-thunk',
   'uuid',
+  'redux-saga',
 ];
 
 module.exports = {
