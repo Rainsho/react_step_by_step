@@ -1,4 +1,5 @@
 var path = require('path');
+var webpack = require('webpack');
 var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -6,7 +7,7 @@ module.exports = {
   entry: path.resolve(__dirname, 'src/index.jsx'),
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: 'bundle_[hash:6].js',
     // publicPath: '/dist/',
   },
   // devtool: 'eval-source-map',
@@ -37,10 +38,11 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
   },
   plugins: [
+    new webpack.DllReferencePlugin({ manifest: require('./dist/vendor_mainfest.json') }),
     new OpenBrowserPlugin({ url: 'http://localhost:9000' }),
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, 'dist', 'index.html'),
-      template: path.resolve(__dirname, 'index.html'),
+      template: path.resolve(__dirname, 'dist', 'index_vendor.html'),
     }),
   ],
 };
