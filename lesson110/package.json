@@ -6,7 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build:dll": "webpack --config webpack.config.dll.js",
+    "build:app": "webpack --config webpack.config.app.js",
+    "build:v2": "npm run build:dll && npm run build:app"
   },
   "author": "Rainsho",
   "license": "ISC",
@@ -40,6 +43,7 @@
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-react": "7.3.0",
+    "html-webpack-plugin": "3.2.0",
     "open-browser-webpack-plugin": "0.0.5",
     "style-loader": "0.18.2",
     "webpack": "3.5.6",
