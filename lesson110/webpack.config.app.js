@@ -42,7 +42,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
   },
   plugins: [
-    new webpack.DllReferencePlugin({ manifest: require('./dist/vendor_mainfest.json') }),
+    new webpack.DllReferencePlugin({ manifest: require('./dist/vendor_manifest.json') }),
     new OpenBrowserPlugin({ url: 'http://localhost:9000' }),
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, 'dist', 'index.html'),

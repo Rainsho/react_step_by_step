@@ -1,6 +1,7 @@
 var path = require('path');
 var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/index.jsx'),
@@ -42,5 +43,6 @@ module.exports = {
       filename: path.resolve(__dirname, 'dist', 'index.html'),
       template: path.resolve(__dirname, 'index.html'),
     }),
+    new BundleAnalyzerPlugin(),
   ],
 };

@@ -31,7 +31,7 @@ module.exports = {
   plugins: [
     new webpack.DllPlugin({
       name: '[name]',
-      path: path.join(__dirname, 'dist', '[name]_mainfest.json'),
+      path: path.join(__dirname, 'dist', '[name]_manifest.json'),
       // context: __dirname,
     }),
     new HtmlWebpackPlugin({
