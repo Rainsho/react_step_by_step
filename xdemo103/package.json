@@ -1,0 +1,29 @@
+{
+  "name": "xdemo103",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "b": "babel-node"
+  },
+  "author": "Rainsho",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "jest": "^23.0.1",
+    "nock": "^9.3.0",
+    "node-fetch": "^2.1.2",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/setupTests.js"
+  }
+}
