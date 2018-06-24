@@ -25,6 +25,7 @@ function render() {
       onDecrement={() => action('DECREMENT')}
       onIncrementAsync={() => action('INCREMENT_ASYNC')}
       onIncrementLatest={() => action('INCREMENT_LATEST')}
+      action={action}
     />,
     document.getElementById('root')
   );
