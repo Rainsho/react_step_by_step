@@ -32,6 +32,7 @@
 - [ ] [xdemo102](https://github.com/Rainsho/react_step_by_step/tree/learn/xdemo102) rx demo
 - [ ] [xdemo103](https://github.com/Rainsho/react_step_by_step/tree/learn/xdemo103) jest demo
 - [ ] [xdemo104](https://github.com/Rainsho/react_step_by_step/tree/learn/xdemo104) redux-saga demo
+- [ ] [xdemo105](https://github.com/Rainsho/react_step_by_step/tree/learn/xdemo105) react(v16 new API) demo
 
 ## 环境版本
 
