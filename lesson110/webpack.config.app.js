@@ -1,7 +1,10 @@
 var path = require('path');
 var webpack = require('webpack');
 var OpenBrowserPlugin = require('open-browser-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+var extractCSS = new ExtractTextPlugin('bundle_[hash:6].css');
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/index.jsx'),
@@ -26,7 +29,8 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: ['style-loader', 'css-loader'],
+        use: extractCSS.extract(['css-loader', 'postcss-loader']),
+        // loader: ['style-loader', 'css-loader', 'postcss-loader'],
       },
     ],
   },
@@ -38,11 +42,12 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
   },
   plugins: [
-    new webpack.DllReferencePlugin({ manifest: require('./dist/vendor_mainfest.json') }),
+    new webpack.DllReferencePlugin({ manifest: require('./dist/vendor_manifest.json') }),
     new OpenBrowserPlugin({ url: 'http://localhost:9000' }),
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, 'dist', 'index.html'),
       template: path.resolve(__dirname, 'dist', 'index_vendor.html'),
     }),
+    extractCSS,
   ],
 };

@@ -57,3 +57,27 @@
 .doer-statistic span:nth-child(2) {
   background-color: #009688;
 }
+
+/* postcss example */
+
+::placeholder {
+  color: gray;
+}
+
+.do-not-exist {
+  display: flex;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+$blue: #056ef0;
+$column: 200px;
+
+.menu {
+  width: calc(4 * $column);
+}
+
+.menu_link {
+  background: color-mod($blue alpha(90%));
+  width: $column;
+}

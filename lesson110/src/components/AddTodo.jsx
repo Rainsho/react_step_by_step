@@ -1,7 +1,7 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 
-const AddTodo = ({ intl, addTodo }) => {
+const AddTodo = ({ intl, addTodo, everySaga, latestSaga }) => {
   let $el = null;
   return (
     <div>
@@ -21,6 +21,8 @@ const AddTodo = ({ intl, addTodo }) => {
       >
         {intl.formatMessage({ id: 'COMMON.ADD' })}
       </button>
+      <button onClick={everySaga}>SAGA_ADD_EVERY</button>
+      <button onClick={latestSaga}>SAGA_ADD_LATEST</button>
     </div>
   );
 };

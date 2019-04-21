@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { v4 } from 'uuid';
 import { todos, ADD_TODO, MARK_TODO, DELETE_TODO } from '../constants';
 

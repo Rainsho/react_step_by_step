@@ -1,4 +1,5 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 
@@ -8,7 +9,15 @@ import AddTodo from '../components/AddTodo';
 import TodoView from '../components/TodoView';
 
 const TodoList = (props) => {
-  const { doer: { doers, current }, todos, intl, addTodo, markTodo, deleteTodo } = props;
+  const {
+    doer: { doers, current },
+    todos,
+    intl,
+    addTodo,
+    markTodo,
+    deleteTodo,
+    dispatch,
+  } = props;
   const doer = doers[current];
 
   // for short
@@ -25,7 +34,15 @@ const TodoList = (props) => {
 
   return (
     <div>
-      <AddTodo addTodo={content => addTodo(doer.uid, content)} />
+      <AddTodo
+        addTodo={content => addTodo(doer.uid, content)}
+        everySaga={content =>
+          dispatch({ type: 'SAGA_TEST_EVERY', payload: { uid: doer.uid, content } })
+        }
+        latestSaga={content =>
+          dispatch({ type: 'SAGA_TEST_LATEST', payload: { uid: doer.uid, content } })
+        }
+      />
       <div style={{ display: Object.values(todos).length > 0 ? 'block' : 'none' }}>
         <div className="todo-title">
           <span>{fmt('COMMON.DONE')}</span>
@@ -41,10 +58,10 @@ const TodoList = (props) => {
 
 export default injectIntl(
   connect(
-    store => ({
-      doer: store.doer,
-      todos: store.todos,
-    }),
-    { addTodo, markTodo, deleteTodo }
+    store => ({ doer: store.doer, todos: store.todos }),
+    dispatch => ({
+      dispatch,
+      ...bindActionCreators({ addTodo, markTodo, deleteTodo }, dispatch),
+    })
   )(TodoList)
 );
