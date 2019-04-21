@@ -1,6 +1,6 @@
 # React Step by Step
 
-> 工作调整，目前真是融入期，`master` 分支可能没时间更新文档，会新开 `learn` 分支写代码。 ——2018 年 5 月 6 日 14 点
+> 这个 Repo 主要写于 2017 年下半年，关于 React 的内容基本上还没有过时。但是关于包管理及构建相关的内容，确实和我当前的认知已经有了较大差距，虽不影响功能但并不值得推荐。如果还有人在看或者有疑问，欢迎在 [issues](https://github.com/Rainsho/react_step_by_step/issues) 页面讨论。 —— Rainsho 更新于 2019 年 4 月
 
 今年开始接触前端，准确的来说是现代前端技术。看的东西越来越多，打算利用这个项目做个总结及回顾。首选这个项目的定位是一个 React 的入坑教程，计划从前端渲染的 Hello World 级的 demo 开始，最后一步步实现一个以 Node.js 作为后台的多人共享的开放的 Todo List 应用，计划涉及的内容包括但不限于: React ES6 Node.js Babel Flux Redux MobX webpack ESLint glup Ant-Design。
 
@@ -28,11 +28,11 @@
 - [ ] [lesson110](./lesson110) 整合 Router & Intl
 - [ ] [eto_spider](https://github.com/Rainsho/eto_spider) Ant-Design
 - [ ] [eto_spider](https://github.com/Rainsho/eto_spider) Node.js 后台
-- [ ] [xdemo101](https://github.com/Rainsho/react_step_by_step/tree/learn/xdemo101) dva demo
-- [ ] [xdemo102](https://github.com/Rainsho/react_step_by_step/tree/learn/xdemo102) rx demo
-- [ ] [xdemo103](https://github.com/Rainsho/react_step_by_step/tree/learn/xdemo103) jest demo
-- [ ] [xdemo104](https://github.com/Rainsho/react_step_by_step/tree/learn/xdemo104) redux-saga demo
-- [ ] [xdemo105](https://github.com/Rainsho/react_step_by_step/tree/learn/xdemo105) react(v16 new API) demo
+- [ ] [xdemo101](./xdemo101) dva demo
+- [ ] [xdemo102](./xdemo102) rx demo
+- [ ] [xdemo103](./xdemo103) jest demo
+- [ ] [xdemo104](./xdemo104) redux-saga demo
+- [ ] [xdemo105](./xdemo105) react(v16 new API) demo
 
 ## 环境版本
 
